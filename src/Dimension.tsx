@@ -8,7 +8,7 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import CustomButton from '../components/CustomButton';
+import CustomButton from './components/CustomButton';
 import { moderateScale } from 'react-native-size-matters';
 
 const screenWidth = Dimensions.get('window').width;
