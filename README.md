@@ -1,97 +1,490 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 React Native Learning Project
 
-# Getting Started
+A React Native + TypeScript project built while learning the fundamentals of React Native development. This project demonstrates navigation, responsive layouts, TypeScript integration, forms, FlatList rendering, and reusable components.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+# 🚀 Tech Stack
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- React Native
+- TypeScript
+- React Navigation
+- React Native Gesture Handler
+- React Native Size Matters
+- Metro Bundler
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
+# 📂 Project Structure
 
-# OR using Yarn
-yarn start
+```text
+src/
+│
+├── assets/
+│
+├── components/
+│   ├── DealCard.tsx
+│   └── CustomButton.tsx
+│
+├── constants/
+│   └── deals.ts
+│
+├── navigation/
+│   ├── AppNavigator.tsx
+│   ├── DrawerNavigator.tsx
+│   └── ManageDealsTabs.tsx
+│
+├── screens/
+│   ├── HomeScreen.tsx
+│   ├── SettingsScreen.tsx
+│   ├── ProfileScreen.tsx
+│   │
+│   └── ManageDeals/
+│       ├── ActiveDealsScreen.tsx
+│       └── ClosedDealsScreen.tsx
+│
+└── App.tsx
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+# 🧭 Navigation Structure
 
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```text
+Stack Navigator
+│
+▼
+Drawer Navigator
+│
+├── Home
+├── Manage Deals
+│      │
+│      ▼
+│   Bottom Tab Navigator
+│      ├── Active Deals
+│      └── Closed Deals
+├── Settings
+└── Profile
 ```
 
-### iOS
+### Navigation Used
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+- Native Stack Navigator
+- Drawer Navigator
+- Bottom Tab Navigator
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+---
 
-```sh
-bundle install
+# ✨ Features
+
+- Drawer Navigation
+- Bottom Tab Navigation
+- Stack Navigation
+- Responsive UI
+- FlatList Rendering
+- Reusable Components
+- TypeScript Integration
+- Controlled Forms
+- Add Deals Dynamically
+- Responsive Scaling
+- Platform-specific Styling
+
+---
+
+# 📚 React Native Concepts Learned
+
+## Core Components
+
+- View
+- Text
+- Image
+- TextInput
+- Pressable
+- Button
+- FlatList
+- ScrollView
+
+---
+
+## Styling
+
+- StyleSheet.create()
+- Inline Styles vs StyleSheet
+- Style Organization
+- Responsive Layouts
+- Flexbox
+- Percentage Width/Height
+- Dimensions API
+- aspectRatio
+- Platform.select()
+- Platform.OS
+- Shadow (iOS)
+- elevation (Android)
+- SafeAreaView
+- StatusBar
+
+---
+
+## Responsive Design
+
+Used
+
+```tsx
+Dimensions.get('window')
 ```
 
-Then, and every time you update your native dependencies, run:
+and
 
-```sh
-bundle exec pod install
+```tsx
+moderateScale()
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Example
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```tsx
+padding: moderateScale(12)
+borderRadius: moderateScale(20)
+fontSize: moderateScale(18)
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Why moderateScale?
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Instead of writing fixed values like
 
-## Step 3: Modify your app
+```tsx
+padding: 12
+fontSize: 18
+```
 
-Now that you have successfully run the app, let's make changes!
+we use
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+```tsx
+padding: moderateScale(12)
+fontSize: moderateScale(18)
+```
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+This scales the UI based on the device screen size, making spacing and font sizes look more consistent across small and large devices.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Package used:
 
-## Congratulations! :tada:
+```bash
+npm install react-native-size-matters
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+---
 
-### Now what?
+# 📝 Forms
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Implemented a controlled form using
 
-# Troubleshooting
+- useState
+- TextInput
+- Pressable
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Features
 
-# Learn More
+- Add Deal
+- Input Validation
+- Dynamic State Updates
+- Form Reset after Submit
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# 📋 FlatList
+
+Learned
+
+- data
+- renderItem
+- keyExtractor
+- showsVerticalScrollIndicator
+
+Example
+
+```tsx
+<FlatList
+    data={deals}
+    keyExtractor={(item) => item.id}
+    renderItem={({ item }) => (
+        <DealCard item={item} />
+    )}
+/>
+```
+
+---
+
+# ⚡ TypeScript Concepts Learned
+
+## Primitive Types
+
+- string
+- number
+- boolean
+- any
+- unknown
+- void
+- never
+
+---
+
+## Arrays
+
+```ts
+number[]
+string[]
+Array<number>
+```
+
+---
+
+## Objects
+
+```ts
+type User = {
+    name: string;
+    age: number;
+}
+```
+
+---
+
+## Union Types
+
+```ts
+type Theme = "light" | "dark";
+```
+
+---
+
+## Literal Types
+
+```ts
+type Status = "loading" | "success" | "error";
+```
+
+---
+
+## Interfaces
+
+Created interfaces for
+
+- Component Props
+- API Models
+- Objects
+
+Example
+
+```ts
+interface User {
+    name: string;
+    age: number;
+    email?: string;
+}
+```
+
+---
+
+## Type Aliases
+
+Used for
+
+- Unions
+- Function Types
+- Object Types
+
+Example
+
+```ts
+type Theme = "light" | "dark";
+```
+
+---
+
+## Interface vs Type
+
+### Interface
+
+Used for
+
+- Props
+- API Responses
+- Object Models
+
+### Type
+
+Used for
+
+- Union Types
+- Function Types
+- Literal Types
+- Type Composition
+
+---
+
+## Function Typing
+
+```ts
+function add(a:number,b:number):number
+```
+
+---
+
+## Props Typing
+
+```ts
+interface ButtonProps {
+    title:string;
+    onPress:()=>void;
+}
+```
+
+---
+
+## Optional Properties
+
+```ts
+email?: string
+```
+
+---
+
+## Readonly Properties
+
+```ts
+readonly id:number
+```
+
+---
+
+## keyof
+
+Used for updating object properties safely.
+
+Example
+
+```ts
+const onChange = (
+    value:string,
+    field:keyof Deal
+)
+```
+
+---
+
+## Generic useState
+
+```ts
+const [deals,setDeals] =
+useState<Deal[]>([])
+```
+
+---
+
+## Generic Functions
+
+Learned generic functions like
+
+```ts
+async function fetchData<T>(
+    url:string
+):Promise<T>
+```
+
+where the caller decides what type `T` should be.
+
+---
+
+## Strict Type Checking
+
+Learned how TypeScript catches
+
+- Wrong data types
+- Missing object properties
+- Invalid navigation params
+- Null / Undefined issues
+- Wrong function arguments
+
+before runtime.
+
+---
+
+# 📱 Navigation Learning
+
+Implemented
+
+- Native Stack Navigator
+- Drawer Navigator
+- Bottom Tabs
+
+Typed all navigation using
+
+```ts
+RootStackParamList
+DrawerParamList
+ManageDealsTabParamList
+```
+
+Example
+
+```ts
+type DrawerParamList = {
+    Home: undefined;
+    Settings: undefined;
+}
+```
+
+---
+
+# 🛠 Packages Used
+
+```bash
+@react-navigation/native
+
+@react-navigation/native-stack
+
+@react-navigation/drawer
+
+@react-navigation/bottom-tabs
+
+react-native-gesture-handler
+
+react-native-reanimated
+
+react-native-safe-area-context
+
+react-native-screens
+
+react-native-size-matters
+```
+
+---
+
+# 🎯 Learning Outcome
+
+Through this project I learned
+
+- React Native fundamentals
+- Responsive UI development
+- Navigation architecture
+- Reusable component creation
+- TypeScript integration
+- Responsive scaling using `moderateScale`
+- Controlled forms
+- FlatList optimization
+- Platform-specific styling
+- Navigation typing
+- Writing cleaner and type-safe React Native applications
+
+---
+
+# 📸 Screens
+
+- Home
+- Manage Deals
+- Active Deals
+- Closed Deals
+- Settings
+- Profile
+
+
+---
