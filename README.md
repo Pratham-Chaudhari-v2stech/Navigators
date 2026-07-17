@@ -1,490 +1,442 @@
-# 📱 React Native Learning Project
+# Day 5 – Navigation Fundamentals (React Native)
 
-A React Native + TypeScript project built while learning the fundamentals of React Native development. This project demonstrates navigation, responsive layouts, TypeScript integration, forms, FlatList rendering, and reusable components.
+## 📌 Objective
 
----
+The goal of this project was to understand how navigation works in React Native using **React Navigation** by implementing:
 
-# 🚀 Tech Stack
-
-- React Native
-- TypeScript
-- React Navigation
-- React Native Gesture Handler
-- React Native Size Matters
-- Metro Bundler
+- Drawer Navigator
+- Bottom Tab Navigator
+- Native Stack Navigator
+- Typed navigation using TypeScript
+- Passing parameters between screens
 
 ---
 
-# 📂 Project Structure
+# 🚀 What I Built
+
+An **Employee Management App** demonstrating nested navigation.
+
+The app consists of:
+
+- Dashboard
+- Employee Module
+- Employee Details
+- Add Employee
+- Profile
+- Settings
+
+Navigation used:
+
+- **Drawer Navigator**
+- **Bottom Tab Navigator**
+- **Native Stack Navigator**
+
+---
+
+# 📂 Folder Structure
 
 ```text
-src/
+src
 │
-├── assets/
-│
-├── components/
-│   ├── DealCard.tsx
-│   └── CustomButton.tsx
-│
-├── constants/
-│   └── deals.ts
-│
-├── navigation/
+├── navigation
 │   ├── AppNavigator.tsx
-│   ├── DrawerNavigator.tsx
-│   └── ManageDealsTabs.tsx
+│   ├── RootDrawer.tsx
+│   ├── MainTabs.tsx
+│   ├── EmployeeStack.tsx
+│   ├── SettingsStack.tsx
+│   └── types.ts
 │
-├── screens/
-│   ├── HomeScreen.tsx
-│   ├── SettingsScreen.tsx
-│   ├── ProfileScreen.tsx
+├── screens
+│   ├── Dashboard
+│   │     DashboardScreen.tsx
 │   │
-│   └── ManageDeals/
-│       ├── ActiveDealsScreen.tsx
-│       └── ClosedDealsScreen.tsx
+│   ├── Employees
+│   │     EmployeeList.tsx
+│   │     EmployeeDetails.tsx
+│   │     AddEmployee.tsx
+│   │
+│   ├── Profile
+│   │     ProfileScreen.tsx
+│   │
+│   └── Settings
+│         SettingsScreen.tsx
+│
+├── components
+│     EmployeeCard.tsx
+│     CustomHeader.tsx
+│
+├── data
+│     employees.ts
 │
 └── App.tsx
 ```
 
 ---
 
-# 🧭 Navigation Structure
 
-```text
-Stack Navigator
-│
-▼
-Drawer Navigator
+```
+NavigationContainer
+        │
+        ▼
+Root Drawer
 │
 ├── Home
-├── Manage Deals
-│      │
-│      ▼
-│   Bottom Tab Navigator
-│      ├── Active Deals
-│      └── Closed Deals
-├── Settings
-└── Profile
-```
-
-### Navigation Used
-
-- Native Stack Navigator
-- Drawer Navigator
-- Bottom Tab Navigator
-
----
-
-# ✨ Features
-
-- Drawer Navigation
-- Bottom Tab Navigation
-- Stack Navigation
-- Responsive UI
-- FlatList Rendering
-- Reusable Components
-- TypeScript Integration
-- Controlled Forms
-- Add Deals Dynamically
-- Responsive Scaling
-- Platform-specific Styling
-
----
-
-# 📚 React Native Concepts Learned
-
-## Core Components
-
-- View
-- Text
-- Image
-- TextInput
-- Pressable
-- Button
-- FlatList
-- ScrollView
-
----
-
-## Styling
-
-- StyleSheet.create()
-- Inline Styles vs StyleSheet
-- Style Organization
-- Responsive Layouts
-- Flexbox
-- Percentage Width/Height
-- Dimensions API
-- aspectRatio
-- Platform.select()
-- Platform.OS
-- Shadow (iOS)
-- elevation (Android)
-- SafeAreaView
-- StatusBar
-
----
-
-## Responsive Design
-
-Used
-
-```tsx
-Dimensions.get('window')
-```
-
-and
-
-```tsx
-moderateScale()
-```
-
-Example
-
-```tsx
-padding: moderateScale(12)
-borderRadius: moderateScale(20)
-fontSize: moderateScale(18)
-```
-
-### Why moderateScale?
-
-Instead of writing fixed values like
-
-```tsx
-padding: 12
-fontSize: 18
-```
-
-we use
-
-```tsx
-padding: moderateScale(12)
-fontSize: moderateScale(18)
-```
-
-This scales the UI based on the device screen size, making spacing and font sizes look more consistent across small and large devices.
-
-Package used:
-
-```bash
-npm install react-native-size-matters
+│     │
+│     ▼
+│  Bottom Tabs
+│
+│  ├── Dashboard
+│  ├── Employees
+│  │      │
+│  │      ▼
+│  │  Employee Stack
+│  │      ├── Employee List
+│  │      ├── Employee Details
+│  │      └── Add Employee
+│  │
+│  └── Profile
+│
+└── Settings
+       │
+       ▼
+   Settings Stack
+       │
+       ▼
+  Settings Screen
 ```
 
 ---
 
-# 📝 Forms
+# 📱 Screens
 
-Implemented a controlled form using
+### Dashboard
 
-- useState
-- TextInput
-- Pressable
-
-Features
-
-- Add Deal
-- Input Validation
-- Dynamic State Updates
-- Form Reset after Submit
+- Landing screen
+- Navigate to Employee Module
+- Open Drawer
 
 ---
 
-# 📋 FlatList
+### Employee List
 
-Learned
-
-- data
-- renderItem
-- keyExtractor
-- showsVerticalScrollIndicator
-
-Example
-
-```tsx
-<FlatList
-    data={deals}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => (
-        <DealCard item={item} />
-    )}
-/>
-```
+- Displays employee list
+- Navigate to Employee Details
+- Navigate to Add Employee
 
 ---
 
-# ⚡ TypeScript Concepts Learned
+### Employee Details
 
-## Primitive Types
-
-- string
-- number
-- boolean
-- any
-- unknown
-- void
-- never
+- Receives employeeId as parameter
+- Displays employee information
 
 ---
 
-## Arrays
+### Add Employee
 
-```ts
-number[]
-string[]
-Array<number>
-```
+- Screen for adding employee (UI only)
 
 ---
 
-## Objects
+### Profile
 
-```ts
-type User = {
-    name: string;
-    age: number;
-}
-```
+- Demonstrates Bottom Tab navigation
 
 ---
 
-## Union Types
+### Settings
 
-```ts
-type Theme = "light" | "dark";
-```
-
----
-
-## Literal Types
-
-```ts
-type Status = "loading" | "success" | "error";
-```
+- Opens from Drawer
+- Demonstrates nested Stack inside Drawer
 
 ---
 
-## Interfaces
+# 🔀 Navigation Used
 
-Created interfaces for
+## Drawer Navigator
 
-- Component Props
-- API Models
-- Objects
+Used for top-level navigation.
 
-Example
-
-```ts
-interface User {
-    name: string;
-    age: number;
-    email?: string;
-}
-```
-
----
-
-## Type Aliases
-
-Used for
-
-- Unions
-- Function Types
-- Object Types
-
-Example
-
-```ts
-type Theme = "light" | "dark";
-```
-
----
-
-## Interface vs Type
-
-### Interface
-
-Used for
-
-- Props
-- API Responses
-- Object Models
-
-### Type
-
-Used for
-
-- Union Types
-- Function Types
-- Literal Types
-- Type Composition
-
----
-
-## Function Typing
-
-```ts
-function add(a:number,b:number):number
-```
-
----
-
-## Props Typing
-
-```ts
-interface ButtonProps {
-    title:string;
-    onPress:()=>void;
-}
-```
-
----
-
-## Optional Properties
-
-```ts
-email?: string
-```
-
----
-
-## Readonly Properties
-
-```ts
-readonly id:number
-```
-
----
-
-## keyof
-
-Used for updating object properties safely.
-
-Example
-
-```ts
-const onChange = (
-    value:string,
-    field:keyof Deal
-)
-```
-
----
-
-## Generic useState
-
-```ts
-const [deals,setDeals] =
-useState<Deal[]>([])
-```
-
----
-
-## Generic Functions
-
-Learned generic functions like
-
-```ts
-async function fetchData<T>(
-    url:string
-):Promise<T>
-```
-
-where the caller decides what type `T` should be.
-
----
-
-## Strict Type Checking
-
-Learned how TypeScript catches
-
-- Wrong data types
-- Missing object properties
-- Invalid navigation params
-- Null / Undefined issues
-- Wrong function arguments
-
-before runtime.
-
----
-
-# 📱 Navigation Learning
-
-Implemented
-
-- Native Stack Navigator
-- Drawer Navigator
-- Bottom Tabs
-
-Typed all navigation using
-
-```ts
-RootStackParamList
-DrawerParamList
-ManageDealsTabParamList
-```
-
-Example
-
-```ts
-type DrawerParamList = {
-    Home: undefined;
-    Settings: undefined;
-}
-```
-
----
-
-# 🛠 Packages Used
-
-```bash
-@react-navigation/native
-
-@react-navigation/native-stack
-
-@react-navigation/drawer
-
-@react-navigation/bottom-tabs
-
-react-native-gesture-handler
-
-react-native-reanimated
-
-react-native-safe-area-context
-
-react-native-screens
-
-react-native-size-matters
-```
-
----
-
-# 🎯 Learning Outcome
-
-Through this project I learned
-
-- React Native fundamentals
-- Responsive UI development
-- Navigation architecture
-- Reusable component creation
-- TypeScript integration
-- Responsive scaling using `moderateScale`
-- Controlled forms
-- FlatList optimization
-- Platform-specific styling
-- Navigation typing
-- Writing cleaner and type-safe React Native applications
-
----
-
-# 📸 Screens
+Contains:
 
 - Home
-- Manage Deals
-- Active Deals
-- Closed Deals
 - Settings
-- Profile
 
+Example:
+
+```tsx
+navigation.openDrawer();
+```
 
 ---
+
+## Bottom Tab Navigator
+
+Used for switching between major sections.
+
+Contains:
+
+- Dashboard
+- Employees
+- Profile
+
+Example:
+
+```tsx
+navigation.navigate('Employees');
+```
+
+---
+
+## Native Stack Navigator
+
+Used for screen-to-screen navigation inside Employee Module.
+
+Flow:
+
+```
+Employee List
+      ↓
+Employee Details
+      ↓
+Add Employee
+```
+
+Example:
+
+```tsx
+navigation.navigate('EmployeeDetails', {
+  employeeId: 1,
+});
+```
+
+---
+
+# 📦 Passing Parameters
+
+Typed using TypeScript.
+
+```ts
+export type EmployeeStackParamList = {
+  EmployeeList: undefined;
+
+  EmployeeDetails: {
+    employeeId: number;
+  };
+
+  AddEmployee: undefined;
+};
+```
+
+Navigation:
+
+```tsx
+navigation.navigate('EmployeeDetails', {
+    employeeId: employee.id,
+});
+```
+
+Receiving:
+
+```tsx
+const { employeeId } = route.params;
+```
+
+---
+
+# ✅ Concepts Learned
+
+## Navigation as State
+
+Unlike React.js websites, React Native navigation does **not** use URLs.
+
+Instead, React Navigation stores the navigation history in JavaScript state.
+
+Example Stack:
+
+```
+Employee List
+
+↓
+
+Employee Details
+
+↓
+
+Add Employee
+```
+
+Pressing Back removes the current screen from the stack.
+
+---
+
+## Stack Navigator
+
+A Stack Navigator behaves like a stack data structure.
+
+```
+push()
+
+Employee List
+
+↓
+
+Employee Details
+
+↓
+
+Add Employee
+```
+
+```
+pop()
+
+Employee List
+
+↓
+
+Employee Details
+```
+
+Used when screens depend on previous screens.
+
+Examples:
+
+- Login → OTP → Home
+- Products → Product Details
+- Employee List → Details
+
+---
+
+## Bottom Tab Navigator
+
+A Bottom Tab Navigator switches between independent sections.
+
+```
+Dashboard
+
+Employees
+
+Profile
+```
+
+Switching tabs does not push new screens onto the stack.
+
+Used for:
+
+- Home
+- Search
+- Notifications
+- Profile
+
+---
+
+## Drawer Navigator
+
+A Drawer Navigator provides a side menu.
+
+Example:
+
+```
+☰
+
+Home
+
+Settings
+```
+
+It is generally used for global navigation.
+
+---
+
+# 💡 Learning Section
+
+During this task I learned:
+
+- How React Navigation works internally
+- Difference between Stack, Tab and Drawer navigators
+- Navigation is maintained as JavaScript state
+- How nested navigators work
+- How parent navigators expose methods such as `openDrawer()`
+- Passing typed parameters using TypeScript
+- Creating reusable navigation files
+- Organizing navigation into multiple navigators
+- Using `NavigationContainer`
+- Difference between navigating, pushing and going back
+
+---
+
+# 📝 Concept Check
+
+## 1. How does navigation state in React Native differ from URL-based routing on the web?
+
+### React Native
+
+- Navigation is stored in JavaScript state.
+- There is no browser URL.
+- Screens are pushed and popped from memory.
+- Back navigation is handled by React Navigation.
+
+### React.js (Web)
+
+- The URL represents the current page.
+- Browser history controls navigation.
+- Refreshing the page loads the URL again.
+
+---
+
+## 2. When would you choose a Tab Navigator over a Stack Navigator?
+
+### Use Bottom Tabs when:
+
+- Switching between independent sections.
+- Home
+- Profile
+- Search
+- Settings
+
+Users can move freely between tabs.
+
+---
+
+### Use Stack Navigator when:
+
+Screens follow a sequence.
+
+Examples:
+
+- Login → OTP → Dashboard
+- Employee List → Details
+- Products → Product Details
+
+Each new screen is pushed onto the stack.
+
+---
+
+# 🛠 Technologies Used
+
+- React Native
+- React Navigation
+- TypeScript
+- Native Stack Navigator
+- Bottom Tab Navigator
+- Drawer Navigator
+
+---
+
+# 🎯 Deliverables Completed
+
+- ✅ Stack Navigator
+- ✅ Bottom Tab Navigator
+- ✅ Drawer Navigator
+- ✅ Nested Navigation
+- ✅ Typed Navigation (TypeScript)
+- ✅ Passing Parameters
+- ✅ 3+ Working Screens
+- ✅ Employee Management Demo App
+
+---
+
+# 📚 Key Takeaways
+
+This project helped me understand how React Navigation manages application state using nested navigators. I learned when to use Stack, Bottom Tabs, and Drawer navigation, how to organize navigation into separate files, and how TypeScript improves navigation safety by providing typed routes and parameters.
