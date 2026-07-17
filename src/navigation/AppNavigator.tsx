@@ -1,23 +1,48 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import DrawerNavigator from './DrawerNavigator';
+
+import SignupScreen from '../screens/SignupScreen';
+import ListScreen from '../screens/ListScreen';
 
 export type RootStackParamList = {
-  Drawer: undefined;
+  Signup: undefined;
+  List: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Drawer"
-        component={DrawerNavigator}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Signup"
+        screenOptions={{
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#2196F3',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}>
+        <Stack.Screen
+          name="Signup"
+          component={SignupScreen}
+          options={{
+            title: 'User Signup',
+          }}
+        />
+
+        <Stack.Screen
+          name="List"
+          component={ListScreen}
+          options={{
+            title: 'Registered Users',
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-

@@ -1,97 +1,400 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📱 React Native Learning Project
 
-# Getting Started
+A React Native + TypeScript project built while learning the fundamentals of React Native development. This project demonstrates navigation, responsive layouts, Redux Toolkit integration, controlled forms, reusable components, FlatList rendering, responsive design, and TypeScript best practices.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+# 🚀 Tech Stack
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- React Native
+- TypeScript
+- React Navigation
+- Redux Toolkit
+- React Redux
+- React Native Gesture Handler
+- React Native Size Matters
+- Metro Bundler
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
+# 📂 Project Structure
 
-# OR using Yarn
-yarn start
+```text
+│
+├── assets/
+│
+├── components/
+│   └── UserCard.tsx
+│
+├── constants/
+│   └── deals.ts
+│
+├── navigation/
+│   ├── AppNavigator.tsx
+│   
+│
+├── redux/
+│   ├── store.ts
+│   └── slices/
+│       └── appSlice.ts
+│
+├── screens/
+│   ├── HomeScreen.tsx
+│   ├── SignupScreen.tsx
+│   ├── SignupScreen.styles.ts
+│   ├── ListScreen.tsx
+│ 
+│       
+│
+│
+└── App.tsx Used
+
+- Native Stack Navigator
+- Drawer Navigator
+- Bottom Tab Navigator
+
+---
+
+# ✨ Features
+
+- Stack Navigation
+- Drawer Navigation
+- Bottom Tab Navigation
+- Responsive UI
+- Responsive Scaling using `moderateScale()`
+- Platform-specific Styling
+- Reusable Components
+- Controlled Forms
+- Dynamic Deal Creation
+- FlatList Rendering
+- User Registration Form
+- Form Validation
+- Profile Card UI
+- Global State Management using Redux Toolkit
+- TypeScript Integration
+
+---
+
+# 📚 React Native Concepts Learned
+
+## Core Components
+
+- View
+- Text
+- Image
+- TextInput
+- Pressable
+- Button
+- FlatList
+- ScrollView
+
+---
+
+## Styling
+
+- StyleSheet.create()
+- Flexbox
+- Responsive Layouts
+- Dimensions API
+- Platform.select()
+- Platform.OS
+- SafeAreaView
+- StatusBar
+- Shadow (iOS)
+- elevation (Android)
+- Responsive Scaling using `moderateScale()`
+
+Example
+
+```tsx
+padding: moderateScale(12);
+fontSize: moderateScale(18);
+borderRadius: moderateScale(20);
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Forms
 
-### Android
+Implemented fully controlled forms using React state.
 
-```sh
-# Using npm
-npm run android
+### Features
 
-# OR using Yarn
-yarn android
+- Controlled Inputs
+- Dynamic Object Updates
+- Form Validation
+- Form Reset after Submission
+- Numeric Keyboard
+
+Example
+
+```tsx
+const [formData, setFormData] = useState({
+  customer: '',
+  company: '',
+  amount: 0,
+});
 ```
 
-### iOS
+---
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## FlatList
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+Implemented dynamic list rendering.
 
-```sh
-bundle install
+Learned
+
+- data
+- renderItem
+- keyExtractor
+- Dynamic Item Addition
+- Updating Arrays using State
+
+Example
+
+```tsx
+setDeals((prevDeals) => [
+  ...prevDeals,
+  formData,
+]);
 ```
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
+# 🗃️ Redux Toolkit
+
+Implemented global state management using Redux Toolkit.
+
+### Created Redux Store
+
+Configured the Redux Store using `configureStore()`.
+
+### Created App Slice
+
+```ts
+const initialState = {
+  appTitle: 'User Registration App',
+};
+
+const appSlice = createSlice({
+  name: 'app',
+  initialState,
+  reducers: {},
+});
+
+export default appSlice.reducer;
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Concepts Learned
 
-```sh
-# Using npm
-npm run ios
+- Redux Store
+- createSlice()
+- configureStore()
+- Provider
+- useSelector()
+- useDispatch()
+- Global State
+- Initial State
+- Reducers
 
-# OR using Yarn
-yarn ios
+---
+
+# ⚡ TypeScript Concepts Learned
+
+## Primitive Types
+
+- string
+- number
+- boolean
+- any
+- unknown
+- void
+- never
+
+---
+
+## Arrays
+
+```ts
+string[]
+number[]
+Array<string>
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## Objects
 
-## Step 3: Modify your app
+```ts
+type Deal = {
+  id: string;
+  customer: string;
+  company: string;
+  amount: number;
+};
+```
 
-Now that you have successfully run the app, let's make changes!
+---
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Interfaces
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+Used for
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- Component Props
+- API Models
+- Object Models
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+## Type Aliases
 
-### Now what?
+Used for
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- Object Types
+- Union Types
+- Function Types
 
-# Troubleshooting
+---
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Generic useState
 
-# Learn More
+```ts
+const [deals, setDeals] = useState<Deal[]>([]);
+```
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## keyof Operator
+
+Used for safely updating object properties.
+
+```ts
+const onChange = (
+  value: string,
+  field: keyof Deal
+)
+```
+
+---
+
+## Computed Property Names
+
+Updated different object fields using a single function.
+
+```ts
+[field]: value
+```
+
+---
+
+## Functional State Updates
+
+```ts
+setDeals((prevDeals) => [
+  ...prevDeals,
+  formData,
+]);
+```
+
+---
+
+## Generic Functions
+
+```ts
+async function fetchData<T>(
+  url: string
+): Promise<T>
+```
+
+---
+
+## Strict Type Checking
+
+Learned how TypeScript catches
+
+- Invalid object properties
+- Wrong data types
+- Invalid navigation params
+- Wrong function arguments
+- Null / Undefined issues
+
+before runtime.
+
+---
+
+# 📱 Screens Implemented
+
+### Home Screen
+
+- Navigation Entry
+- Responsive Layout
+
+### Sign Up Screen
+
+- User Registration Form
+- Controlled Inputs
+- Form Validation
+
+### List Screen
+
+- Displayed Dynamic Lists
+- FlatList Rendering
+
+---
+
+# 🛠 Packages Used
+
+```bash
+@react-navigation/native
+
+@react-navigation/native-stack
+
+@reduxjs/toolkit
+
+react-redux
+
+react-native-gesture-handler
+
+react-native-safe-area-context
+
+react-native-reanimated
+
+react-native-screens
+
+react-native-size-matters
+```
+
+---
+
+# 🎯 Learning Outcome
+
+Through this project I learned
+
+- React Native fundamentals
+- Building responsive user interfaces
+- Drawer, Stack & Bottom Tab Navigation
+- Responsive Scaling using `moderateScale()`
+- Creating reusable components
+- Controlled Forms
+- Form Validation
+- Dynamic FlatList Rendering
+- Updating Arrays and Objects Immutably
+- Platform-specific Styling
+- TypeScript Integration
+- Generic Types
+- `keyof` Operator
+- Functional State Updates
+- Redux Toolkit Fundamentals
+- Global State Management
+- Organizing React Native projects
+- Writing cleaner, scalable and type-safe React Native applications
+
+---
+
+# 📸 Screens
+
+- Home
+- Sign Up
+- List
+
+---
