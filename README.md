@@ -1,442 +1,250 @@
-# Day 5 – Navigation Fundamentals (React Native)
+# 📚 Student Course Manager
 
-## 📌 Objective
-
-The goal of this project was to understand how navigation works in React Native using **React Navigation** by implementing:
-
-- Drawer Navigator
-- Bottom Tab Navigator
-- Native Stack Navigator
-- Typed navigation using TypeScript
-- Passing parameters between screens
+A simple React Native application built using **React Native CLI** and **TypeScript** as a Week 1 assignment. The app demonstrates the fundamentals of React Native including navigation, forms, lists, local storage, and TypeScript.
 
 ---
 
-# 🚀 What I Built
+## 📱 Features
 
-An **Employee Management App** demonstrating nested navigation.
-
-The app consists of:
-
-- Dashboard
-- Employee Module
-- Employee Details
-- Add Employee
-- Profile
-- Settings
-
-Navigation used:
-
-- **Drawer Navigator**
-- **Bottom Tab Navigator**
-- **Native Stack Navigator**
+- 🔐 Login Screen with basic form validation
+- 🏠 Home Dashboard
+- 📚 View all courses
+- ➕ Add a new course
+- 📖 View complete course details
+- 💾 Persistent storage using AsyncStorage
+- 🚪 Drawer Navigation
+- 🧭 Stack Navigation
+- ✅ Fully typed using TypeScript
 
 ---
 
-# 📂 Folder Structure
+## 📂 Project Structure
 
-```text
+```
 src
+│
+├── screens
+│   ├── Login.tsx
+│   ├── Home.tsx
+│   ├── Courses.tsx
+│   ├── AddCourse.tsx
+│   ├── CourseDetails.tsx
+│   └── Profile.tsx
 │
 ├── navigation
 │   ├── AppNavigator.tsx
-│   ├── RootDrawer.tsx
-│   ├── MainTabs.tsx
-│   ├── EmployeeStack.tsx
-│   ├── SettingsStack.tsx
-│   └── types.ts
+│   └── RootDrawer.tsx
 │
-├── screens
-│   ├── Dashboard
-│   │     DashboardScreen.tsx
-│   │
-│   ├── Employees
-│   │     EmployeeList.tsx
-│   │     EmployeeDetails.tsx
-│   │     AddEmployee.tsx
-│   │
-│   ├── Profile
-│   │     ProfileScreen.tsx
-│   │
-│   └── Settings
-│         SettingsScreen.tsx
+├── storage
+│   └── courseStorage.ts
 │
-├── components
-│     EmployeeCard.tsx
-│     CustomHeader.tsx
-│
-├── data
-│     employees.ts
+├── types
+│   └── type.ts
 │
 └── App.tsx
 ```
 
 ---
 
+## 🚀 Tech Stack
+
+- React Native CLI
+- TypeScript
+- React Navigation
+  - Native Stack Navigator
+  - Drawer Navigator
+- AsyncStorage
+- React Hooks
+
+---
+
+## 📱 Navigation Flow
 
 ```
-NavigationContainer
-        │
-        ▼
-Root Drawer
-│
-├── Home
-│     │
-│     ▼
-│  Bottom Tabs
-│
-│  ├── Dashboard
-│  ├── Employees
-│  │      │
-│  │      ▼
-│  │  Employee Stack
-│  │      ├── Employee List
-│  │      ├── Employee Details
-│  │      └── Add Employee
-│  │
-│  └── Profile
-│
-└── Settings
-       │
-       ▼
-   Settings Stack
-       │
-       ▼
-  Settings Screen
+Login
+   │
+   ▼
+Drawer Navigation
+   │
+   ├── Home
+   │      │
+   │      └── Add Course
+   │
+   ├── Courses
+   │      │
+   │      ├── Add Course
+   │      └── Course Details
+   │
+   └── Profile
 ```
 
 ---
 
-# 📱 Screens
+## 💾 Data Storage
 
-### Dashboard
+The application stores course information locally using **AsyncStorage**.
 
-- Landing screen
-- Navigate to Employee Module
-- Open Drawer
+Each course contains:
 
----
+- ID
+- Title
+- Instructor
+- Duration
+- Level
+- Description
 
-### Employee List
-
-- Displays employee list
-- Navigate to Employee Details
-- Navigate to Add Employee
-
----
-
-### Employee Details
-
-- Receives employeeId as parameter
-- Displays employee information
+Data persists even after closing the application.
 
 ---
 
-### Add Employee
-
-- Screen for adding employee (UI only)
-
----
-
-### Profile
-
-- Demonstrates Bottom Tab navigation
-
----
-
-### Settings
-
-- Opens from Drawer
-- Demonstrates nested Stack inside Drawer
-
----
-
-# 🔀 Navigation Used
-
-## Drawer Navigator
-
-Used for top-level navigation.
-
-Contains:
-
-- Home
-- Settings
-
-Example:
-
-```tsx
-navigation.openDrawer();
-```
-
----
-
-## Bottom Tab Navigator
-
-Used for switching between major sections.
-
-Contains:
-
-- Dashboard
-- Employees
-- Profile
-
-Example:
-
-```tsx
-navigation.navigate('Employees');
-```
-
----
-
-## Native Stack Navigator
-
-Used for screen-to-screen navigation inside Employee Module.
-
-Flow:
-
-```
-Employee List
-      ↓
-Employee Details
-      ↓
-Add Employee
-```
-
-Example:
-
-```tsx
-navigation.navigate('EmployeeDetails', {
-  employeeId: 1,
-});
-```
-
----
-
-# 📦 Passing Parameters
-
-Typed using TypeScript.
-
-```ts
-export type EmployeeStackParamList = {
-  EmployeeList: undefined;
-
-  EmployeeDetails: {
-    employeeId: number;
-  };
-
-  AddEmployee: undefined;
-};
-```
-
-Navigation:
-
-```tsx
-navigation.navigate('EmployeeDetails', {
-    employeeId: employee.id,
-});
-```
-
-Receiving:
-
-```tsx
-const { employeeId } = route.params;
-```
-
----
-
-# ✅ Concepts Learned
-
-## Navigation as State
-
-Unlike React.js websites, React Native navigation does **not** use URLs.
-
-Instead, React Navigation stores the navigation history in JavaScript state.
-
-Example Stack:
-
-```
-Employee List
-
-↓
-
-Employee Details
-
-↓
-
-Add Employee
-```
-
-Pressing Back removes the current screen from the stack.
-
----
-
-## Stack Navigator
-
-A Stack Navigator behaves like a stack data structure.
-
-```
-push()
-
-Employee List
-
-↓
-
-Employee Details
-
-↓
-
-Add Employee
-```
-
-```
-pop()
-
-Employee List
-
-↓
-
-Employee Details
-```
-
-Used when screens depend on previous screens.
-
-Examples:
-
-- Login → OTP → Home
-- Products → Product Details
-- Employee List → Details
-
----
-
-## Bottom Tab Navigator
-
-A Bottom Tab Navigator switches between independent sections.
-
-```
-Dashboard
-
-Employees
-
-Profile
-```
-
-Switching tabs does not push new screens onto the stack.
-
-Used for:
-
-- Home
-- Search
-- Notifications
-- Profile
-
----
-
-## Drawer Navigator
-
-A Drawer Navigator provides a side menu.
-
-Example:
-
-```
-☰
-
-Home
-
-Settings
-```
-
-It is generally used for global navigation.
-
----
-
-# 💡 Learning Section
-
-During this task I learned:
-
-- How React Navigation works internally
-- Difference between Stack, Tab and Drawer navigators
-- Navigation is maintained as JavaScript state
-- How nested navigators work
-- How parent navigators expose methods such as `openDrawer()`
-- Passing typed parameters using TypeScript
-- Creating reusable navigation files
-- Organizing navigation into multiple navigators
-- Using `NavigationContainer`
-- Difference between navigating, pushing and going back
-
----
-
-# 📝 Concept Check
-
-## 1. How does navigation state in React Native differ from URL-based routing on the web?
+## 📖 Concepts Practiced
 
 ### React Native
 
-- Navigation is stored in JavaScript state.
-- There is no browser URL.
-- Screens are pushed and popped from memory.
-- Back navigation is handled by React Navigation.
-
-### React.js (Web)
-
-- The URL represents the current page.
-- Browser history controls navigation.
-- Refreshing the page loads the URL again.
-
----
-
-## 2. When would you choose a Tab Navigator over a Stack Navigator?
-
-### Use Bottom Tabs when:
-
-- Switching between independent sections.
-- Home
-- Profile
-- Search
-- Settings
-
-Users can move freely between tabs.
+- Functional Components
+- Core Components
+  - View
+  - Text
+  - TextInput
+  - FlatList
+  - ScrollView
+  - TouchableOpacity
+- StyleSheet
+- Flexbox Layout
+- KeyboardAvoidingView
+- TouchableWithoutFeedback
 
 ---
 
-### Use Stack Navigator when:
+### TypeScript
 
-Screens follow a sequence.
-
-Examples:
-
-- Login → OTP → Dashboard
-- Employee List → Details
-- Products → Product Details
-
-Each new screen is pushed onto the stack.
+- Interfaces
+- Type Aliases
+- Typed Props
+- Navigation Types
+- State Typing
+- Function Typing
+- Strict Type Checking
 
 ---
 
-# 🛠 Technologies Used
+### Navigation
 
-- React Native
-- React Navigation
-- TypeScript
 - Native Stack Navigator
-- Bottom Tab Navigator
 - Drawer Navigator
+- Nested Navigation
+- Passing Parameters Between Screens
+- Typed Navigation using RootStackParamList
 
 ---
 
-# 🎯 Deliverables Completed
+### Forms
 
-- ✅ Stack Navigator
-- ✅ Bottom Tab Navigator
-- ✅ Drawer Navigator
-- ✅ Nested Navigation
-- ✅ Typed Navigation (TypeScript)
-- ✅ Passing Parameters
-- ✅ 3+ Working Screens
-- ✅ Employee Management Demo App
+- Controlled Components
+- Form Validation
+- State Management with useState
+- Input Handling
 
 ---
 
-# 📚 Key Takeaways
+### Lists
 
-This project helped me understand how React Navigation manages application state using nested navigators. I learned when to use Stack, Bottom Tabs, and Drawer navigation, how to organize navigation into separate files, and how TypeScript improves navigation safety by providing typed routes and parameters.
+- FlatList
+- keyExtractor
+- Custom Render Item
+- Dynamic Data Rendering
+
+---
+
+### AsyncStorage
+
+- Saving Data
+- Reading Data
+- Updating Data
+- Persistent Local Storage
+- Helper Functions for Storage Operations
+
+---
+
+### React Hooks
+
+- useState
+- useCallback
+- useFocusEffect
+
+---
+
+## 🎯 Learning Outcomes
+
+This project helped me understand:
+
+- Setting up a React Native CLI project
+- Building reusable and typed components
+- Structuring a React Native project
+- Working with multiple navigators
+- Difference between Stack and Drawer navigation
+- Passing typed parameters between screens
+- Creating controlled forms
+- Form validation techniques
+- Rendering dynamic lists using FlatList
+- Using AsyncStorage for persistent local data
+- Managing screen lifecycle with `useFocusEffect`
+- Organizing reusable storage helper functions
+- Using TypeScript for safer React Native development
+
+---
+
+## ▶️ Running the Project
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start Metro:
+
+```bash
+npx react-native start
+```
+
+Run Android:
+
+```bash
+npx react-native run-android
+```
+
+---
+
+## 📸 Screens
+
+- Login
+- Home
+- Courses List
+- Add Course
+- Course Details
+- Profile
+
+(Add screenshots here)
+
+---
+
+## 🌟 Future Improvements
+
+- Edit Course
+- Delete Course
+- Search Courses
+- Course Categories
+- Authentication using API
+- Redux Toolkit / Redux Saga Integration
+- Dark Mode
+- Form validation using Formik + Yup
+- Unit Testing
+
+---
