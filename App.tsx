@@ -1,12 +1,12 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { Text, View } from 'react-native';
-import AppNavigator from './src/navigations/AppNavigator'
+import HomeScreen from './src/screens/HomeScreen';
+import TodoProvider from './src/context/TodoProvider';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <TodoProvider>
+      <HomeScreen />
+    </TodoProvider>
   );
 }
