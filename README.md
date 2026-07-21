@@ -1,250 +1,178 @@
-# 📚 Student Course Manager
+# 📋 React Native Todo App (TypeScript)
 
-A simple React Native application built using **React Native CLI** and **TypeScript** as a Week 1 assignment. The app demonstrates the fundamentals of React Native including navigation, forms, lists, local storage, and TypeScript.
+A simple and scalable **Todo Application** built with **React Native**, **TypeScript**, **Context API**, and **useReducer**. This project demonstrates how to manage shared state without Redux by combining React's built-in Context API with the `useReducer` hook.
 
 ---
 
-## 📱 Features
+## 🚀 Features
 
-- 🔐 Login Screen with basic form validation
-- 🏠 Home Dashboard
-- 📚 View all courses
-- ➕ Add a new course
-- 📖 View complete course details
-- 💾 Persistent storage using AsyncStorage
-- 🚪 Drawer Navigation
-- 🧭 Stack Navigation
-- ✅ Fully typed using TypeScript
+* ➕ Add new todos
+* ✅ Mark todos as completed
+* 🗑️ Delete todos
+* ⚡ Shared state using Context API
+* 🔄 Centralized state management with `useReducer`
+* 📝 Fully typed with TypeScript
+* 📱 Clean and responsive React Native UI
+
+---
+
+## 🛠️ Tech Stack
+
+* React Native
+* TypeScript
+* React Context API
+* React `useReducer`
+* React Hooks
 
 ---
 
 ## 📂 Project Structure
 
-```
-src
+```text
+src/
 │
-├── screens
-│   ├── Login.tsx
-│   ├── Home.tsx
-│   ├── Courses.tsx
-│   ├── AddCourse.tsx
-│   ├── CourseDetails.tsx
-│   └── Profile.tsx
+├── components/
+│   ├── AddTodo.tsx
+│   ├── TodoItem.tsx
+│   └── TodoList.tsx
 │
-├── navigation
-│   ├── AppNavigator.tsx
-│   └── RootDrawer.tsx
+├── context/
+│   ├── TodoContext.tsx
+│   └── TodoProvider.tsx
 │
-├── storage
-│   └── courseStorage.ts
+├── reducers/
+│   └── todoReducer.ts
 │
-├── types
-│   └── type.ts
+├── screens/
+│   └── HomeScreen.tsx
 │
-└── App.tsx
-```
-
----
-
-## 🚀 Tech Stack
-
-- React Native CLI
-- TypeScript
-- React Navigation
-  - Native Stack Navigator
-  - Drawer Navigator
-- AsyncStorage
-- React Hooks
-
----
-
-## 📱 Navigation Flow
-
-```
-Login
-   │
-   ▼
-Drawer Navigation
-   │
-   ├── Home
-   │      │
-   │      └── Add Course
-   │
-   ├── Courses
-   │      │
-   │      ├── Add Course
-   │      └── Course Details
-   │
-   └── Profile
+├── types/
+│   └── todo.ts
+│
+├── App.tsx
+└── index.tsx
 ```
 
 ---
 
-## 💾 Data Storage
+## ⚙️ State Management Flow
 
-The application stores course information locally using **AsyncStorage**.
-
-Each course contains:
-
-- ID
-- Title
-- Instructor
-- Duration
-- Level
-- Description
-
-Data persists even after closing the application.
-
----
-
-## 📖 Concepts Practiced
-
-### React Native
-
-- Functional Components
-- Core Components
-  - View
-  - Text
-  - TextInput
-  - FlatList
-  - ScrollView
-  - TouchableOpacity
-- StyleSheet
-- Flexbox Layout
-- KeyboardAvoidingView
-- TouchableWithoutFeedback
+```text
+User Action
+     │
+     ▼
+dispatch(action)
+     │
+     ▼
+useReducer
+     │
+     ▼
+New State
+     │
+     ▼
+Context API
+     │
+     ▼
+Components Re-render
+```
 
 ---
 
-### TypeScript
+## ▶️ Getting Started
 
-- Interfaces
-- Type Aliases
-- Typed Props
-- Navigation Types
-- State Typing
-- Function Typing
-- Strict Type Checking
-
----
-
-### Navigation
-
-- Native Stack Navigator
-- Drawer Navigator
-- Nested Navigation
-- Passing Parameters Between Screens
-- Typed Navigation using RootStackParamList
-
----
-
-### Forms
-
-- Controlled Components
-- Form Validation
-- State Management with useState
-- Input Handling
-
----
-
-### Lists
-
-- FlatList
-- keyExtractor
-- Custom Render Item
-- Dynamic Data Rendering
-
----
-
-### AsyncStorage
-
-- Saving Data
-- Reading Data
-- Updating Data
-- Persistent Local Storage
-- Helper Functions for Storage Operations
-
----
-
-### React Hooks
-
-- useState
-- useCallback
-- useFocusEffect
-
----
-
-## 🎯 Learning Outcomes
-
-This project helped me understand:
-
-- Setting up a React Native CLI project
-- Building reusable and typed components
-- Structuring a React Native project
-- Working with multiple navigators
-- Difference between Stack and Drawer navigation
-- Passing typed parameters between screens
-- Creating controlled forms
-- Form validation techniques
-- Rendering dynamic lists using FlatList
-- Using AsyncStorage for persistent local data
-- Managing screen lifecycle with `useFocusEffect`
-- Organizing reusable storage helper functions
-- Using TypeScript for safer React Native development
-
----
-
-## ▶️ Running the Project
-
-Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
 ```
 
-Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-Start Metro:
+### 3. Start Metro
 
 ```bash
-npx react-native start
+npm start
 ```
 
-Run Android:
+### 4. Run Android
 
 ```bash
-npx react-native run-android
+npm run android
+```
+
+### 5. Run iOS
+
+```bash
+npm run ios
 ```
 
 ---
 
-## 📸 Screens
+# 📚 Learnings
 
-- Login
-- Home
-- Courses List
-- Add Course
-- Course Details
-- Profile
+This project helped me strengthen my understanding of React Native state management concepts and TypeScript.
 
-(Add screenshots here)
+### ✅ Context API
+
+* Learned how to create a Context using `createContext`.
+* Used a custom `useTodo()` hook to access shared state.
+* Avoided prop drilling by providing state from a single `TodoProvider`.
+* Understood when Context API is suitable for sharing state across multiple components.
+
+### ✅ useReducer
+
+* Learned how reducers centralize state update logic.
+* Managed all todo operations using dispatched actions.
+* Implemented actions such as:
+
+  * Add Todo
+  * Delete Todo
+  * Toggle Todo
+* Understood the reducer pattern of:
+
+  * Current State
+  * Action
+  * New State
+
+### ✅ TypeScript
+
+* Created interfaces for Todo objects.
+* Defined state and action types.
+* Used union types for reducer actions.
+* Improved type safety and editor autocompletion.
+
+### ✅ Redux Concepts
+
+Although this project does not use Redux, it helped me understand the core concepts that Redux is built on:
+
+* State
+* Actions
+* Dispatch
+* Reducers
+* Predictable state updates
+
+I also learned the difference between local state management using `useReducer` and global state management using a Redux Store.
+
+### ✅ React Component Architecture
+
+* Organized the project into reusable components.
+* Separated UI, business logic, and state management.
+* Followed a scalable folder structure suitable for medium-sized applications.
 
 ---
 
-## 🌟 Future Improvements
+# 📌 Future Improvements
 
-- Edit Course
-- Delete Course
-- Search Courses
-- Course Categories
-- Authentication using API
-- Redux Toolkit / Redux Saga Integration
-- Dark Mode
-- Form validation using Formik + Yup
-- Unit Testing
+* ✏️ Edit existing todos
+* 🔍 Search todos
+* 🗂️ Filter All / Active / Completed
+* 💾 Persist todos using AsyncStorage
+* 🎨 Improve UI with custom styling and animations
+* 🌙 Dark Mode support
 
 ---
+
