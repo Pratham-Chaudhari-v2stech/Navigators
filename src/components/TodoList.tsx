@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-  FlatList,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import { FlatList, Text, StyleSheet } from 'react-native';
 
 import TodoItem from './TodoItem';
-import { useTodo } from '../context/TodoContext';
+import { useAppSelector } from '../redux/hooks';
+import { selectTodos } from '../redux/todoSlice';
 
 const TodoList = () => {
-  const { state } = useTodo();
+  const todos = useAppSelector(selectTodos);
 
-  if (state.todos.length === 0) {
+  if (todos.length === 0) {
     return (
       <Text style={styles.empty}>
         No Todos Added
@@ -21,11 +18,9 @@ const TodoList = () => {
 
   return (
     <FlatList
-      data={state.todos}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({ item }) => (
-        <TodoItem todo={item} />
-      )}
+      data={todos}
+      keyExtractor={item => item.id}
+      renderItem={({ item }) => <TodoItem todo={item} />}
     />
   );
 };

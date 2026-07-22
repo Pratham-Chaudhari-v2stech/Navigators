@@ -7,34 +7,32 @@ import {
 } from 'react-native';
 
 import { Todo } from '../types/todos';
-import { useTodo } from '../context/TodoContext';
+import { useAppDispatch } from '../redux/hooks';
+import {
+  toggleTodo,
+  deleteTodo,
+} from '../redux/todoSlice';
 
 interface Props {
   todo: Todo;
 }
 
 const TodoItem = ({ todo }: Props) => {
-  const { dispatch } = useTodo();
+  const dispatch = useAppDispatch();
 
-  const toggleTodo = () => {
-    dispatch({
-      type: 'TOGGLE_TODO',
-      payload: todo.id,
-    });
+  const handleToggleTodo = () => {
+    dispatch(toggleTodo(todo.id));
   };
 
-  const deleteTodo = () => {
-    dispatch({
-      type: 'DELETE_TODO',
-      payload: todo.id,
-    });
+  const handleDeleteTodo = () => {
+    dispatch(deleteTodo(todo.id));
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.todoContainer}
-        onPress={toggleTodo}>
+        onPress={handleToggleTodo}>
         <Text
           style={[
             styles.todoText,
@@ -44,7 +42,7 @@ const TodoItem = ({ todo }: Props) => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={deleteTodo}>
+      <TouchableOpacity onPress={handleDeleteTodo}>
         <Text style={styles.delete}>Delete</Text>
       </TouchableOpacity>
     </View>

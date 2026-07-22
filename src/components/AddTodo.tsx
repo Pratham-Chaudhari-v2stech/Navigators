@@ -7,11 +7,12 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { useTodo } from '../context/TodoContext';
+import { useAppDispatch } from '../redux/hooks';
+import { addTodo } from '../redux/todoSlice';
 
 const AddTodo = () => {
   const [title, setTitle] = useState('');
-  const { dispatch } = useTodo();
+  const dispatch = useAppDispatch();
 
   const handleAddTodo = () => {
     const trimmedTitle = title.trim();
@@ -20,10 +21,13 @@ const AddTodo = () => {
       return;
     }
 
-    dispatch({
-      type: 'ADD_TODO',
-      payload: trimmedTitle,
-    });
+    dispatch(
+      addTodo({
+        id: Date.now().toString(),
+        title: trimmedTitle,
+        completed: false,
+      }),
+    );
 
     setTitle('');
   };

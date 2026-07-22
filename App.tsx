@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
 import HomeScreen from './src/screens/HomeScreen';
-import TodoProvider from './src/context/TodoProvider';
+import { Provider } from 'react-redux';
+import {store} from './src/redux/store'
 
 export default function App() {
   return (
-    <TodoProvider>
+    <Provider store={store}>
       <HomeScreen />
-    </TodoProvider>
+    </Provider>
   );
 }
