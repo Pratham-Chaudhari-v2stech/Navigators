@@ -1,216 +1,196 @@
-# 📋 React Native Todo App (TypeScript + Redux Toolkit)
+# 📱 React Native API Integration (TypeScript)
 
-A simple and scalable **Todo Application** built with **React Native**, **TypeScript**, and **Redux Toolkit**. This project demonstrates centralized global state management using Redux Toolkit, typed Redux hooks, slices, actions, and selectors.
+A simple React Native application built with **TypeScript** that demonstrates how to fetch data from a public REST API using **Axios**. The project focuses on handling asynchronous API calls, strongly typing API responses, and managing different UI states such as loading, error, success, and empty.
 
 ---
 
 ## 🚀 Features
 
-* ➕ Add new todos
-* ✅ Mark todos as completed
-* 🗑️ Delete todos
-* 🌍 Global state management using Redux Toolkit
-* 🏪 Centralized Redux Store
-* 🎯 Typed Actions, Reducers, and Selectors
-* 📝 Fully typed with TypeScript
-* 📱 Clean and responsive React Native UI
+* 🌐 Fetch posts from a public REST API
+* ⚡ Axios for HTTP requests
+* 🔄 Async data fetching using `async/await`
+* 🎯 TypeScript interfaces for API responses
+* 📋 Display data using `FlatList`
+* ⏳ Loading state with `ActivityIndicator`
+* ❌ Error state with Retry functionality
+* 📭 Empty state when no data is returned
+* 🧩 Reusable UI components
+* 📁 Clean and scalable project structure
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-* React Native
+* React Native CLI
 * TypeScript
-* Redux Toolkit
-* React Redux
-* React Hooks
+* Axios
+* React Hooks (`useState`, `useEffect`)
+* FlatList
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-src/
+src
 │
-├── components/
-│   ├── AddTodo.tsx
-│   ├── TodoItem.tsx
-│   └── TodoList.tsx
+├── api
+│   └── postApi.ts
 │
-├── redux/
-│   ├── store.ts
-│   ├── hooks.ts
-│   └── todoSlice.ts
+├── components
+│   ├── EmptyView.tsx
+│   ├── ErrorView.tsx
+│   ├── LoadingView.tsx
+│   └── PostItem.tsx
 │
-├── screens/
+├── constants
+│   └── api.ts
+│
+├── screens
 │   └── HomeScreen.tsx
 │
-├── types/
-│   └── todos.ts
+├── styles
+│   └── HomeStyle.ts
 │
-├── App.tsx
-└── index.tsx
+├── types
+│   └── post.ts
+│
+└── App.tsx
 ```
 
 ---
 
-## ⚙️ Redux State Flow
+## 📡 API Used
 
-```text
-User Action
-     │
-     ▼
-dispatch(action)
-     │
-     ▼
-Redux Store
-     │
-     ▼
-Todo Slice Reducer
-     │
-     ▼
-Updated State
-     │
-     ▼
-Selector (useSelector)
-     │
-     ▼
-Components Re-render
+**DummyJSON Posts API**
+
 ```
+https://dummyjson.com/posts
+```
+
+The application fetches a list of posts and displays:
+
+* Title
+* Body
+* Tags
+* User ID
 
 ---
 
-## ▶️ Getting Started
+## 📦 Installation
 
-### 1. Clone the Repository
+Clone the repository
 
 ```bash
 git clone <repository-url>
 ```
 
-### 2. Install Dependencies
+Move into the project
+
+```bash
+cd <project-folder>
+```
+
+Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Start Metro
+Install Axios
 
 ```bash
-npm start
+npm install axios
 ```
 
-### 4. Run Android
+Run Android
 
 ```bash
-npm run android
+npx react-native run-android
 ```
 
-### 5. Run iOS
+Run iOS (macOS only)
 
 ```bash
-npm run ios
+npx react-native run-ios
 ```
 
 ---
 
-# 📚 Learnings
+## 📱 Application Flow
 
-This project helped me strengthen my understanding of global state management in React Native using Redux Toolkit and TypeScript.
-
-## ✅ Redux Toolkit
-
-* Learned how to configure a Redux Store using `configureStore()`.
-* Created a Redux Slice using `createSlice()`.
-* Managed application state in a centralized store.
-* Learned how Redux Toolkit reduces boilerplate compared to traditional Redux.
-* Understood immutable state updates using Immer.
-* Generated Redux actions automatically using `createSlice`.
-
----
-
-## ✅ React Redux
-
-* Wrapped the application with the Redux `Provider`.
-* Used `useDispatch` to dispatch Redux actions.
-* Used `useSelector` to access state from the Redux Store.
-* Created typed hooks (`useAppDispatch` and `useAppSelector`) for better TypeScript support.
-
----
-
-## ✅ Redux Store
-
-* Learned why a centralized store is useful for larger applications.
-* Registered reducers inside the Redux Store.
-* Understood how application state is stored globally.
-* Learned the flow of:
-
-  * Dispatch Action
-  * Reducer
-  * Store Update
-  * Component Re-render
+```text
+App Launch
+     │
+     ▼
+HomeScreen
+     │
+     ▼
+useEffect()
+     │
+     ▼
+Fetch Posts (Axios)
+     │
+     ├──────────────┐
+     ▼              ▼
+Success          Failure
+     │              │
+     ▼              ▼
+Store Data      Show Error
+     │              │
+     ▼              │
+FlatList        Retry Button
+     │
+     ▼
+Display Posts
+```
 
 ---
 
-## ✅ Redux Slice
+## 📚 Concepts Covered
 
-* Created a `todoSlice` using `createSlice()`.
-* Implemented reducers for:
-
-  * Add Todo
-  * Toggle Todo
-  * Delete Todo
-* Learned how actions and reducers are generated together inside a slice.
-
----
-
-## ✅ Selectors
-
-* Learned how selectors read only the required part of the Redux Store.
-* Created reusable selectors to avoid repeating store access logic.
-* Understood how selectors improve performance by allowing components to subscribe only to the data they need.
+* Axios API Integration
+* HTTP GET Request
+* Async/Await
+* React Hooks
+* useEffect
+* useState
+* TypeScript Interfaces
+* Typed API Responses
+* FlatList
+* ActivityIndicator
+* Component Reusability
+* Error Handling
+* Conditional Rendering
 
 ---
 
-## ✅ TypeScript
+## 🧠 Learnings
 
-* Created interfaces for Todo objects.
-* Typed Redux state using interfaces.
-* Used `PayloadAction` for strongly typed Redux actions.
-* Used `RootState` and `AppDispatch` for type-safe Redux operations.
+Through this project, I learned:
 
----
-
-## ✅ React Component Architecture
-
-* Organized the project into reusable components.
-* Separated UI from business logic.
-* Kept Redux logic inside dedicated files (`store`, `slice`, and `hooks`).
-* Followed a scalable folder structure suitable for medium and large applications.
-
----
-
-## ✅ Key Concepts Learned
-
-* Global State Management
-* Redux Store
-* Redux Toolkit
-* createSlice
-* configureStore
-* Actions
-* Reducers
-* Dispatch
-* Selectors
-* Typed Hooks
-* Predictable State Updates
+* How to fetch data from a public REST API using Axios.
+* Why API calls should be placed inside `useEffect()` when loading data on screen initialization.
+* How `async/await` simplifies asynchronous code and improves readability.
+* How to define TypeScript interfaces for API responses to catch type errors during development.
+* The importance of separating **loading**, **error**, **empty**, and **success** states instead of only checking if data exists.
+* How to use `ActivityIndicator` to provide visual feedback while data is loading.
+* How to implement a retry mechanism when an API request fails.
+* How to display dynamic data efficiently using `FlatList`.
+* How to separate API logic into a dedicated service layer (`postApi.ts`) instead of making API calls directly inside UI components.
+* How reusable components such as `LoadingView`, `ErrorView`, `EmptyView`, and `PostItem` help keep screens clean and maintainable.
+* How organizing code into folders like **api**, **components**, **constants**, **types**, **styles**, and **screens** improves project scalability and readability.
 
 ---
 
-# 📌 Future Improvements
+## 🎯 Future Improvements
 
-* ✏️ Edit existing todos
-* 🔍 Search todos
-* 🗂️ Filter All / Active / Completed
-* 💾 Persist todos using AsyncStorage or Redux Persist
-* 🎨 Improve UI with custom styling and animations
-* 🌙 Dark Mode support
+* Pull-to-refresh
+* Search posts
+* Pagination (Load More)
+* Filter posts by tags
+* View post details on a separate screen
+* Offline caching using AsyncStorage
+* API state management using Redux Toolkit or Redux Saga
+
+---
