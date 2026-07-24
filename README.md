@@ -1,29 +1,20 @@
-# 📋 React Native Todo App (TypeScript + Redux Toolkit)
+# 💰 React Native Expense Tracker (TypeScript)
 
-A simple and scalable **Todo Application** built with **React Native**, **TypeScript**, and **Redux Toolkit**. This project demonstrates centralized global state management using Redux Toolkit, typed Redux hooks, slices, actions, and selectors.
+A simple **Expense Tracker** application built with **React Native**, **TypeScript**, **React Navigation**, and **AsyncStorage**. This project demonstrates how to persist data locally on the device so that expenses remain available even after the app is closed or restarted.
 
 ---
 
 ## 🚀 Features
 
-* ➕ Add new todos
-* ✅ Mark todos as completed
-* 🗑️ Delete todos
-* 🌍 Global state management using Redux Toolkit
-* 🏪 Centralized Redux Store
-* 🎯 Typed Actions, Reducers, and Selectors
-* 📝 Fully typed with TypeScript
-* 📱 Clean and responsive React Native UI
-
----
-
-## 🛠️ Tech Stack
-
-* React Native
-* TypeScript
-* Redux Toolkit
-* React Redux
-* React Hooks
+* ➕ Add new expenses
+* 📋 View recently added expenses
+* 📖 View complete expense history
+* 🗑️ Delete expenses
+* 💾 Persist data using AsyncStorage
+* 🔄 Automatically reload data when returning to a screen
+* 🧩 Reusable UI components
+* 🧭 Stack Navigation with multiple screens
+* 📱 Built with TypeScript for type safety
 
 ---
 
@@ -33,184 +24,178 @@ A simple and scalable **Todo Application** built with **React Native**, **TypeSc
 src/
 │
 ├── components/
-│   ├── AddTodo.tsx
-│   ├── TodoItem.tsx
-│   └── TodoList.tsx
+│   ├── EmptyState.tsx
+│   ├── ExpenseCard.tsx
+│   └── TotalExpenseCard.tsx
 │
-├── redux/
-│   ├── store.ts
-│   ├── hooks.ts
-│   └── todoSlice.ts
+├── constants/
+│   └── categories.ts
+│
+├── navigation/
+│   └── AppNavigator.tsx
 │
 ├── screens/
-│   └── HomeScreen.tsx
+│   ├── HomeScreen.tsx
+│   ├── AddExpenseScreen.tsx
+│   └── ExpenseHistoryScreen.tsx
+│
+├── storage/
+│   └── expenseStorage.ts
 │
 ├── types/
-│   └── todos.ts
+│   ├── expense.ts
 │
-├── App.tsx
-└── index.tsx
+└── App.tsx
 ```
 
 ---
 
-## ⚙️ Redux State Flow
+## 📱 Screens
 
-```text
-User Action
-     │
-     ▼
-dispatch(action)
-     │
-     ▼
-Redux Store
-     │
-     ▼
-Todo Slice Reducer
-     │
-     ▼
-Updated State
-     │
-     ▼
-Selector (useSelector)
-     │
-     ▼
-Components Re-render
-```
+### 🏠 Home Screen
+
+* Displays total expenses
+* Shows the latest 5 expenses
+* Navigate to Add Expense
+* Navigate to Expense History
+
+### ➕ Add Expense Screen
+
+* Enter expense title
+* Enter amount
+* Select a category
+* Save expense locally using AsyncStorage
+
+### 📖 Expense History Screen
+
+* View all saved expenses
+* Delete expenses
+* Automatically refreshes when revisited
 
 ---
 
-## ▶️ Getting Started
+## 🛠️ Tech Stack
 
-### 1. Clone the Repository
+* React Native CLI
+* TypeScript
+* React Navigation (Native Stack)
+* AsyncStorage
+* React Hooks
+
+---
+
+## 📦 Installation
 
 ```bash
 git clone <repository-url>
-```
 
-### 2. Install Dependencies
+cd ExpenseTracker
 
-```bash
 npm install
 ```
 
-### 3. Start Metro
+Install iOS pods (macOS only):
 
 ```bash
-npm start
+cd ios
+pod install
 ```
 
-### 4. Run Android
+Run the application:
+
+### Android
 
 ```bash
-npm run android
+npx react-native run-android
 ```
 
-### 5. Run iOS
+### iOS
 
 ```bash
-npm run ios
+npx react-native run-ios
 ```
 
 ---
 
-# 📚 Learnings
+## 💾 Local Storage
 
-This project helped me strengthen my understanding of global state management in React Native using Redux Toolkit and TypeScript.
+This project uses **AsyncStorage** to persist expenses.
 
-## ✅ Redux Toolkit
+Operations implemented:
 
-* Learned how to configure a Redux Store using `configureStore()`.
-* Created a Redux Slice using `createSlice()`.
-* Managed application state in a centralized store.
-* Learned how Redux Toolkit reduces boilerplate compared to traditional Redux.
-* Understood immutable state updates using Immer.
-* Generated Redux actions automatically using `createSlice`.
+* Save expenses
+* Retrieve expenses
+* Add new expense
+* Delete expense
 
----
-
-## ✅ React Redux
-
-* Wrapped the application with the Redux `Provider`.
-* Used `useDispatch` to dispatch Redux actions.
-* Used `useSelector` to access state from the Redux Store.
-* Created typed hooks (`useAppDispatch` and `useAppSelector`) for better TypeScript support.
+Data remains available even after the application is closed or restarted.
 
 ---
 
-## ✅ Redux Store
+## 📌 Navigation Flow
 
-* Learned why a centralized store is useful for larger applications.
-* Registered reducers inside the Redux Store.
-* Understood how application state is stored globally.
-* Learned the flow of:
-
-  * Dispatch Action
-  * Reducer
-  * Store Update
-  * Component Re-render
-
----
-
-## ✅ Redux Slice
-
-* Created a `todoSlice` using `createSlice()`.
-* Implemented reducers for:
-
-  * Add Todo
-  * Toggle Todo
-  * Delete Todo
-* Learned how actions and reducers are generated together inside a slice.
+```text
+Home
+ ├──► Add Expense
+ │         │
+ │         └── Save Expense
+ │               │
+ │               ▼
+ │          AsyncStorage
+ │               │
+ │               ▼
+ │         navigation.goBack()
+ │
+ └──► Expense History
+```
 
 ---
 
-## ✅ Selectors
+## 🧠 Concepts Practiced
 
-* Learned how selectors read only the required part of the Redux Store.
-* Created reusable selectors to avoid repeating store access logic.
-* Understood how selectors improve performance by allowing components to subscribe only to the data they need.
+* Functional Components
+* React Hooks
 
----
-
-## ✅ TypeScript
-
-* Created interfaces for Todo objects.
-* Typed Redux state using interfaces.
-* Used `PayloadAction` for strongly typed Redux actions.
-* Used `RootState` and `AppDispatch` for type-safe Redux operations.
-
----
-
-## ✅ React Component Architecture
-
-* Organized the project into reusable components.
-* Separated UI from business logic.
-* Kept Redux logic inside dedicated files (`store`, `slice`, and `hooks`).
-* Followed a scalable folder structure suitable for medium and large applications.
+  * useState
+  * useCallback
+  * useFocusEffect
+* Component Reusability
+* Stack Navigation
+* TypeScript Interfaces
+* FlatList Rendering
+* Local Data Persistence
+* AsyncStorage CRUD Operations
+* Project Folder Organization
 
 ---
 
-## ✅ Key Concepts Learned
+## 📖 Learnings
 
-* Global State Management
-* Redux Store
-* Redux Toolkit
-* createSlice
-* configureStore
-* Actions
-* Reducers
-* Dispatch
-* Selectors
-* Typed Hooks
-* Predictable State Updates
+Through this project, I learned:
+
+* How to store and retrieve persistent data using AsyncStorage.
+* The difference between temporary component state and persistent local storage.
+* How to organize a React Native project into reusable components, screens, storage utilities, constants, and types.
+* How to use React Navigation to move between multiple screens.
+* How to refresh screen data automatically using `useFocusEffect` when navigating back.
+* How to create reusable UI components to avoid duplicate code.
+* How to build a clean CRUD flow (Create, Read, Delete) using local storage.
+* How TypeScript interfaces improve code readability and reduce runtime errors.
+* When to persist data locally versus when data should be fetched from a server.
+* Why AsyncStorage is suitable for preferences, cached data, and offline support, but not for highly dynamic or sensitive data.
 
 ---
 
-# 📌 Future Improvements
+## 🎯 Future Improvements
 
-* ✏️ Edit existing todos
-* 🔍 Search todos
-* 🗂️ Filter All / Active / Completed
-* 💾 Persist todos using AsyncStorage or Redux Persist
-* 🎨 Improve UI with custom styling and animations
-* 🌙 Dark Mode support
+* ✏️ Edit existing expenses
+* 🔍 Search expenses
+* 🗂️ Filter by category
+* 📅 Filter by date
+* 📊 Monthly expense summary
+* 🌙 Dark mode
+* 💱 Currency selection
+* ☁️ Backend API integration
+* 🔄 Replace AsyncStorage with MMKV for improved performance
+
+---
