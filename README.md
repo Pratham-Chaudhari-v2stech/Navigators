@@ -1,201 +1,139 @@
-# 💰 React Native Expense Tracker (TypeScript)
+# 📍 React Native Location Permission App
 
-A simple **Expense Tracker** application built with **React Native**, **TypeScript**, **React Navigation**, and **AsyncStorage**. This project demonstrates how to persist data locally on the device so that expenses remain available even after the app is closed or restarted.
-
----
-
-## 🚀 Features
-
-* ➕ Add new expenses
-* 📋 View recently added expenses
-* 📖 View complete expense history
-* 🗑️ Delete expenses
-* 💾 Persist data using AsyncStorage
-* 🔄 Automatically reload data when returning to a screen
-* 🧩 Reusable UI components
-* 🧭 Stack Navigation with multiple screens
-* 📱 Built with TypeScript for type safety
+A simple **React Native** application built with **TypeScript** that demonstrates Android **runtime permissions** and access to the device's **current location**. The app requests location permission from the user, fetches the current GPS coordinates, and displays them on the screen.
 
 ---
 
-## 📂 Project Structure
+# 🚀 Features
+
+* 📍 Request runtime location permission
+* 📱 Handle Android permission flow using `PermissionsAndroid`
+* 🌍 Fetch the device's current location
+* 📌 Display latitude and longitude
+* ❌ Handle permission denial gracefully
+* ⚠️ Display appropriate status messages and alerts
+* 🧩 Clean separation of permission logic and UI
+
+---
+
+# 🛠️ Tech Stack
+
+* React Native CLI
+* TypeScript
+* React Hooks (`useState`)
+* `PermissionsAndroid`
+* `react-native-geolocation-service`
+
+---
+
+# 📂 Project Structure
 
 ```text
 src/
-│
-├── components/
-│   ├── EmptyState.tsx
-│   ├── ExpenseCard.tsx
-│   └── TotalExpenseCard.tsx
-│
-├── constants/
-│   └── categories.ts
-│
-├── navigation/
-│   └── AppNavigator.tsx
-│
 ├── screens/
-│   ├── HomeScreen.tsx
-│   ├── AddExpenseScreen.tsx
-│   └── ExpenseHistoryScreen.tsx
+│   └── LocationScreen.tsx
 │
-├── storage/
-│   └── expenseStorage.ts
-│
-├── types/
-│   ├── expense.ts
+├── utils/
+│   └── permissions.ts
 │
 └── App.tsx
 ```
 
 ---
 
-## 📱 Screens
+# 📱 App Flow
 
-### 🏠 Home Screen
+1. Launch the application.
+2. Tap **Get Current Location**.
+3. The app requests location permission.
+4. If permission is granted:
 
-* Displays total expenses
-* Shows the latest 5 expenses
-* Navigate to Add Expense
-* Navigate to Expense History
+   * Fetch the current GPS coordinates.
+   * Display the latitude and longitude.
+5. If permission is denied:
 
-### ➕ Add Expense Screen
-
-* Enter expense title
-* Enter amount
-* Select a category
-* Save expense locally using AsyncStorage
-
-### 📖 Expense History Screen
-
-* View all saved expenses
-* Delete expenses
-* Automatically refreshes when revisited
+   * Show an alert message.
+   * Display an appropriate status message.
 
 ---
 
-## 🛠️ Tech Stack
+# 🔐 Runtime Permission Flow
 
-* React Native CLI
-* TypeScript
-* React Navigation (Native Stack)
-* AsyncStorage
-* React Hooks
+```text
+User taps button
+        │
+        ▼
+Request Location Permission
+        │
+        ▼
+Permission Granted?
+     /          \
+   Yes           No
+   │             │
+   ▼             ▼
+Fetch GPS     Show Alert
+Coordinates   & Status
+   │
+   ▼
+Display Latitude & Longitude
+```
 
 ---
 
-## 📦 Installation
+# 📷 Testing on Android Emulator
+
+Since the Android emulator does not have real GPS hardware, a location must be simulated manually.
+
+To set the emulator location:
+
+1. Open the Android Emulator.
+2. Click the **⋮ (Extended Controls)** button.
+3. Select **Location**.
+4. Enter latitude and longitude values.
+5. Click **Send**.
+6. Tap **Get Current Location** in the app.
+
+---
+
+# ▶️ Run the Project
+
+Install dependencies:
 
 ```bash
-git clone <repository-url>
-
-cd ExpenseTracker
-
 npm install
 ```
 
-Install iOS pods (macOS only):
+Install the location library:
 
 ```bash
-cd ios
-pod install
+npm install react-native-geolocation-service
 ```
 
-Run the application:
-
-### Android
+Run the Android application:
 
 ```bash
 npx react-native run-android
 ```
 
-### iOS
+---
 
-```bash
-npx react-native run-ios
-```
+# 📚 Learnings
+
+During this project, I learned:
+
+* The difference between declaring a permission in `AndroidManifest.xml` and requesting it at runtime.
+* How Android's runtime permission model protects user privacy.
+* How to request location permission using `PermissionsAndroid`.
+* How to handle both granted and denied permission states without crashing the app.
+* How to use `async`/`await` for asynchronous permission requests.
+* How to fetch the current GPS coordinates using `react-native-geolocation-service`.
+* How to manage dynamic data using React's `useState` hook.
+* How to display native alert dialogs using the `Alert` API.
+* The importance of separating business logic (`permissions.ts`) from UI (`LocationScreen.tsx`) for better code organization and reusability.
+* How Android emulators simulate GPS locations and why manual location configuration is required when testing without a physical device.
 
 ---
 
-## 💾 Local Storage
+# 🎯 Outcome
 
-This project uses **AsyncStorage** to persist expenses.
-
-Operations implemented:
-
-* Save expenses
-* Retrieve expenses
-* Add new expense
-* Delete expense
-
-Data remains available even after the application is closed or restarted.
-
----
-
-## 📌 Navigation Flow
-
-```text
-Home
- ├──► Add Expense
- │         │
- │         └── Save Expense
- │               │
- │               ▼
- │          AsyncStorage
- │               │
- │               ▼
- │         navigation.goBack()
- │
- └──► Expense History
-```
-
----
-
-## 🧠 Concepts Practiced
-
-* Functional Components
-* React Hooks
-
-  * useState
-  * useCallback
-  * useFocusEffect
-* Component Reusability
-* Stack Navigation
-* TypeScript Interfaces
-* FlatList Rendering
-* Local Data Persistence
-* AsyncStorage CRUD Operations
-* Project Folder Organization
-
----
-
-## 📖 Learnings
-
-Through this project, I learned:
-
-* How to store and retrieve persistent data using AsyncStorage.
-* The difference between temporary component state and persistent local storage.
-* How to organize a React Native project into reusable components, screens, storage utilities, constants, and types.
-* How to use React Navigation to move between multiple screens.
-* How to refresh screen data automatically using `useFocusEffect` when navigating back.
-* How to create reusable UI components to avoid duplicate code.
-* How to build a clean CRUD flow (Create, Read, Delete) using local storage.
-* How TypeScript interfaces improve code readability and reduce runtime errors.
-* When to persist data locally versus when data should be fetched from a server.
-* Why AsyncStorage is suitable for preferences, cached data, and offline support, but not for highly dynamic or sensitive data.
-
----
-
-## 🎯 Future Improvements
-
-* ✏️ Edit existing expenses
-* 🔍 Search expenses
-* 🗂️ Filter by category
-* 📅 Filter by date
-* 📊 Monthly expense summary
-* 🌙 Dark mode
-* 💱 Currency selection
-* ☁️ Backend API integration
-* 🔄 Replace AsyncStorage with MMKV for improved performance
-
----
+This project demonstrates how to integrate a native device feature into a React Native application while following Android's runtime permission model and handling different permission scenarios in a user-friendly manner.
