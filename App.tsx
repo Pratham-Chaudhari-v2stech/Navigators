@@ -1,12 +1,13 @@
 import React from 'react';
-import LocationScreen from './src/screens/LocationScreen';
-import {SafeAreaView} from 'react-native-safe-area-context'
+import AppNavigator from './src/navigation/AppNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 const App = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <LocationScreen />
-    </SafeAreaView>
+    <NavigationContainer>
+      <AppNavigator/>
+      {/* <AppStateScreen /> */}
+    </NavigationContainer>
   );
 };
 
