@@ -131,11 +131,107 @@ export const API = 'https://api.weatherapi.com/v1/current.json';
 
 # 📚 Learnings
 
-## React Navigation
+## Push Notifications
 
-* Created a Native Stack Navigator.
-* Passed data between screens using navigation parameters.
-* Used `NativeStackScreenProps` for strongly typed navigation and route props.
+Learned how push notifications work in mobile applications.
+
+* Push notifications are **not sent directly by the React Native app**.
+* They are delivered by the operating system using platform-specific push services:
+
+  * **Firebase Cloud Messaging (FCM)** for Android.
+  * **Apple Push Notification Service (APNs)** for iOS.
+* The app registers with the push service and receives a unique **device token**.
+* This device token is sent to a backend server.
+* Whenever the backend wants to notify the user, it sends the notification request to FCM/APNs using the device token.
+* The operating system then delivers the notification to the device, even if the application is completely closed.
+
+### Push Notification Flow
+
+```text
+React Native App
+       │
+       ▼
+Register with FCM / APNs
+       │
+       ▼
+Receive Device Token
+       │
+       ▼
+Send Token to Backend
+       │
+       ▼
+Backend Sends Notification Request
+       │
+       ▼
+FCM / APNs
+       │
+       ▼
+Operating System
+       │
+       ▼
+Notification Displayed on Device
+```
+
+---
+
+## Local Notifications vs Push Notifications
+
+### Local Notifications
+
+* Triggered by the application itself.
+* Do not require a backend.
+* Can be scheduled for reminders, alarms, timers, etc.
+
+### Push Notifications
+
+* Triggered by a backend server.
+* Delivered through FCM (Android) or APNs (iOS).
+* Can arrive even when the application is in the background or completely closed.
+
+---
+
+## Native Modules
+
+Learned why some React Native features require native code.
+
+* JavaScript cannot directly access many device capabilities.
+* Features such as:
+
+  * Camera
+  * Push Notifications
+  * Bluetooth
+  * NFC
+  * Background Services
+  * Biometric Authentication
+  * GPS
+* require native Android (Kotlin/Java) or iOS (Swift/Objective-C) implementations.
+
+React Native libraries expose these native capabilities through **Native Modules**, allowing JavaScript to communicate with platform-specific code.
+
+### Why rebuilding is required
+
+When installing libraries that include native code:
+
+* New Android or iOS source files are added to the project.
+* Native dependencies are linked into the application.
+* The project must be rebuilt for the native code to be compiled.
+
+A simple JavaScript reload is **not** enough because the native binaries need to be regenerated.
+
+---
+
+## Hands-on Practice
+
+During this module, learned:
+
+* The overall architecture of push notifications.
+* The role of FCM and APNs in delivering notifications.
+* The purpose of a device token.
+* Why a backend server is required for production push notifications.
+* The difference between local notifications and push notifications.
+* Why native modules are required for hardware and operating system features.
+* Why installing native libraries requires rebuilding the Android/iOS application.
+
 
 ---
 
