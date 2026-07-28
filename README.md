@@ -1,234 +1,235 @@
-# 🌦️ Weather App
+# Smart Search App
 
-A React Native Weather App built using **React Native CLI** and **TypeScript**. The app allows users to search for the current weather of any city, displays detailed weather information, and stores recent searches locally using AsyncStorage.
-
----
-
-## 📱 Features
-
-* 🔍 Search weather by city name
-* 🌡️ View current temperature
-* 🤗 View "Feels Like" temperature
-* 🌧️ Weather condition with icon
-* 💨 Wind speed
-* 💧 Humidity
-* 🌍 Pressure
-* 👀 Visibility
-* ☀️ UV Index
-* 🏭 Air Quality (PM2.5)
-* 🕒 Local time of the searched city
-* 💾 Recent searches stored using AsyncStorage
-* 🗑️ Clear recent search history
-* ⏳ Loading indicator while fetching data
-* ❌ Error handling for invalid city names
-* 🧭 Navigation between Home and Weather Details screens
-* 🏗️ Modular project structure with reusable components
+A React Native application built with **React Native CLI** and **TypeScript** that demonstrates advanced React concepts including **Custom Hooks**, **useRef**, and **useLayoutEffect**. The app allows users to search **Products** and **Users** using the DummyJSON API while showcasing reusable components and reusable business logic.
 
 ---
 
-## 🛠️ Tech Stack
+# Features
 
-* React Native CLI
-* TypeScript
-* React Navigation (Native Stack)
-* Axios
-* AsyncStorage
-* WeatherAPI.com
+* 🔍 Search Products using the DummyJSON Products API.
+* 👤 Search Users using the DummyJSON Users API.
+* ⏱️ Debounced search to reduce unnecessary API calls.
+* 🔄 Reusable `useFetch` hook for API requests.
+* ⌨️ Auto-focus the search input using `useRef`.
+* 🧭 Dynamically update the screen title using `useLayoutEffect`.
+* 📦 Reusable UI components (`SearchBar`, `ProductCard`, `UserCard`).
+* 📃 Display results efficiently using `FlatList`.
+* ⏳ Loading indicator while fetching data.
+* ❌ Error handling for failed API requests.
+* 📭 Empty state when no matching results are found.
+* ✅ Fully typed using TypeScript interfaces and generics.
 
 ---
 
-## 📂 Project Structure
+# Project Structure
 
 ```text
 src/
 │
 ├── components/
+│   ├── ProductCard.tsx
 │   ├── SearchBar.tsx
-│   └── RecentSearchItem.tsx
+│   └── UserCard.tsx
 │
 ├── constants/
 │   └── api.ts
 │
+├── hooks/
+│   ├── useDebounce.ts
+│   └── useFetch.ts
+│
 ├── navigation/
-│   └── AppNavigator.tsx
+│   ├── AppNavigator.tsx
+│   └── types.ts
 │
 ├── screens/
 │   ├── HomeScreen.tsx
-│   └── WeatherDetailsScreen.tsx
+│   ├── ProductSearchScreen.tsx
+│   └── UserSearchScreen.tsx
 │
 ├── services/
-│   └── weatherApi.ts
+│   └── api.ts
 │
-├── storage/
-│   └── recentSearchStorage.ts
-│
-├── types/
-│   └── weather.ts
-│
-└── App.tsx
+└── types/
+    ├── product.ts
+    └── user.ts
 ```
 
 ---
 
-## 🚀 How to Run
+# Technologies Used
 
-1. Clone the repository.
-2. Install dependencies.
-
-```bash
-npm install
-```
-
-3. Install iOS pods (macOS only).
-
-```bash
-cd ios
-pod install
-```
-
-4. Start Metro.
-
-```bash
-npx react-native start
-```
-
-5. Run the application.
-
-Android:
-
-```bash
-npx react-native run-android
-```
-
-iOS:
-
-```bash
-npx react-native run-ios
-```
+* React Native CLI
+* TypeScript
+* React Navigation
+* Axios
+* DummyJSON API
+* React Hooks
 
 ---
 
-## 🔑 API Setup
+# Learnings
 
-This project uses **WeatherAPI.com**.
+## Custom Hooks
 
-1. Create a free account.
-2. Generate an API key.
-3. Add your API key inside:
+* A **custom hook** is simply a JavaScript/TypeScript function whose name starts with **`use`** and that uses one or more React hooks internally.
+* Custom hooks allow reusable stateful logic to be shared across multiple components without duplicating code.
+* If the same combination of `useState`, `useEffect`, or other hooks appears in multiple components, it's a strong indication that the logic should be extracted into a custom hook.
+* Built two reusable custom hooks:
+
+  * **`useDebounce`** to delay updating the search value until the user stops typing, reducing unnecessary API requests.
+  * **`useFetch`** to encapsulate API fetching logic, including loading, error handling, and storing fetched data.
+* The same custom hooks were reused in both the **Product Search** and **User Search** screens.
+
+---
+
+## useRef
+
+* `useRef` stores a mutable value that persists across re-renders without causing a component to re-render when the value changes.
+* Used `useRef` to store a reference to the search `TextInput`.
+* Automatically focused the search input when the screen opened by calling:
+
+```tsx
+inputRef.current?.focus();
+```
+
+* `useRef` is commonly used for:
+
+  * Input focus
+  * Timer IDs (`setTimeout`, `setInterval`)
+  * Storing previous values
+  * Accessing native component methods
+
+* Unlike `useState`, updating a ref **does not trigger a re-render**, making it ideal for values that do not affect the UI.
+
+---
+
+## useLayoutEffect
+
+* `useLayoutEffect` runs **synchronously after React has updated the UI but before the screen is painted**.
+* Used `useLayoutEffect` to:
+
+  * Dynamically update the navigation title.
+  * Focus the search input before the user sees the screen.
+* Compared with `useEffect`:
+
+  * `useEffect` runs **after** the screen is painted.
+  * `useLayoutEffect` runs **before** the screen is painted, making it useful for UI measurements or updates that should happen without visible flicker.
+
+---
+
+
+## Generic Custom Hook
+
+* Implemented `useFetch<T>()` using TypeScript Generics.
+* The same hook can fetch different types of data while maintaining type safety.
+* Used it for both:
+
+  * Product API responses.
+  * User API responses.
+
+---
+
+## Axios Instance
+
+* Created a reusable Axios instance using `axios.create()`.
+* Centralized common API configuration such as:
+
+  * Base URL
+  * Request timeout
+* This approach avoids repeating configuration across every API request and makes future enhancements like authentication headers and interceptors easier.
+
+---
+
+## Debouncing
+
+* Implemented a reusable `useDebounce` hook.
+* Instead of calling the API on every keystroke, the app waits for the user to stop typing for a specified delay before making the request.
+* This improves application performance and reduces unnecessary network requests.
+
+---
+
+## Reusable Components
+
+Created reusable UI components to improve maintainability:
+
+* `SearchBar`
+* `ProductCard`
+* `UserCard`
+
+These components keep the screen components clean and encourage code reuse.
+
+---
+
+## Separation of Concerns
+
+Organized the project into separate folders for:
+
+* Components
+* Hooks
+* Navigation
+* Services
+* Types
+* Constants
+* Screens
+
+This makes the project easier to maintain, scale, and understand.
+
+---
+
+## Deliverable
+
+Successfully built:
+
+* A custom `useDebounce` hook from scratch.
+* A custom `useFetch` hook from scratch.
+* Reused both hooks across multiple screens.
+* Implemented `useRef` for input focus.
+* Implemented `useLayoutEffect` for updating navigation options before the screen is painted.
+
+---
+
+## Concept Check
+
+### What makes a function a hook instead of a regular function?
+
+A function becomes a custom hook when:
+
+* Its name starts with **`use`**.
+* It uses one or more React hooks (`useState`, `useEffect`, `useRef`, etc.) internally.
+* It encapsulates reusable stateful logic that can be shared across multiple components while following React's Rules of Hooks.
+
+---
+
+### Why use `useRef` instead of `useState` for a timer ID?
+
+A timer ID is not displayed in the UI.
+
+If it were stored using `useState`, every update would trigger an unnecessary re-render.
+
+Using `useRef` allows the timer ID to persist across renders while avoiding extra re-renders, making it the preferred choice for values that don't affect the rendered output.
+
+---
+
+# APIs Used
+
+### Search Products
 
 ```text
-src/constants/api.ts
+GET /products/search?q={query}
 ```
 
-Example:
+### Search Users
 
-```ts
-export const API_KEY = 'YOUR_API_KEY';
-export const API = 'https://api.weatherapi.com/v1/current.json';
+```text
+GET /users/search?q={query}
+```
+
+Base URL:
+
+```text
+https://dummyjson.com
 ```
 
 ---
 
-# 📚 Learnings
-
-## React Navigation
-
-* Created a Native Stack Navigator.
-* Passed data between screens using navigation parameters.
-* Used `NativeStackScreenProps` for strongly typed navigation and route props.
-
----
-
-## API Integration
-
-* Performed HTTP requests using Axios.
-* Passed query parameters using Axios `params`.
-* Managed asynchronous API calls with `async/await`.
-* Implemented loading and error handling while fetching weather data.
-
----
-
-## AsyncStorage
-
-* Stored recent city searches locally.
-* Retrieved stored data when the app launched.
-* Converted arrays to strings using `JSON.stringify()`.
-* Converted stored strings back into arrays using `JSON.parse()`.
-* Removed duplicate recent searches.
-* Cleared stored data using `AsyncStorage.removeItem()`.
-
----
-
-## React Hooks
-
-* Used `useState` for managing component state.
-* Used `useEffect` for loading stored data and fetching API data after component mount.
-
----
-
-## TypeScript
-
-* Created interfaces for API responses.
-* Typed navigation parameters.
-* Used typed function parameters and return types for better code safety.
-
----
-
-## Component Reusability
-
-* Created reusable components such as:
-
-  * SearchBar
-  * RecentSearchItem
-
-* Separated API logic, storage logic, UI components, and screen components into different folders for better maintainability.
-
----
-
-## AppState
-
-Implemented an `AppStateScreen` to understand the React Native application lifecycle.
-
-Learned how to:
-
-* Detect whether the app is currently in the foreground (`active`) or background (`background`).
-* Listen for app state changes using `AppState.addEventListener()`.
-* Store the previous app state using `useRef`.
-* Detect when the user returns to the app by comparing the previous and current states.
-* Clean up the event listener inside the `useEffect` cleanup function to prevent memory leaks.
-
-Example use cases of `AppState`:
-
-* Refresh data when the app returns to the foreground.
-* Pause or resume videos and games.
-* Save user progress before the app goes to the background.
-* Refresh account information in banking applications.
-* Reduce battery usage by stopping unnecessary background work.
-
----
-
-## Overall Concepts Reinforced
-
-* React Native project structure
-* Functional components
-* State management using hooks
-* Navigation between screens
-* API consumption
-* Local data persistence
-* Reusable component design
-* TypeScript best practices
-* App lifecycle awareness using `AppState`
-
----
-
-## Future Improvements
-
-* Search suggestions (autocomplete)
-* Current location weather using device GPS
-* Five-day weather forecast
-* Pull-to-refresh
-* Dark mode
-* Favorite cities
-* Push notifications for weather alerts
-* Unit toggle (°C / °F)
-* Better weather animations and icons

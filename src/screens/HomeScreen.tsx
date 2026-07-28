@@ -1,113 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
-  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert,
-  Pressable,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SearchBar from '../components/SearchBar';
 import {
-  getRecentSearches,
-  saveRecentSearch,
-  clearSearch,
-} from '../storage/recentSearchStorage';
-import { RootStackParamList } from '../types/weather';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { getWeather } from '../services/weatherApi';
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigations/types';
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<
+type Props = NativeStackScreenProps<
   RootStackParamList,
   'Home'
 >;
 
-const HomeScreen = () => {
-  const navigation = useNavigation<HomeScreenNavigationProp>();
-
-  const [city, setCity] = useState('');
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    loadRecentSearches();
-  }, []);
-
-  const loadRecentSearches = async () => {
-    const data = await getRecentSearches();
-    setRecentSearches(data);
-  };
-  const handleClearSearch = async () => {
-    await clearSearch();
-    setRecentSearches([]);
-  };
-
-  const handleSearch = async (searchCity?: string) => {
-    const cityName = (searchCity || city).trim();
-
-    if (!cityName) {
-      Alert.alert('Validation', 'Please enter a city name.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      await getWeather(cityName);
-
-      await saveRecentSearch(cityName);
-      await loadRecentSearches();
-
-      navigation.navigate('WeatherDetails', {
-        city: cityName,
-      });
-
-      setCity('');
-    } catch (error) {
-      Alert.alert('Error', 'City not found.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const HomeScreen = ({ navigation }: Props) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Weather App</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>
+        Smart Search
+      </Text>
 
-      <SearchBar
-        value={city}
-        onChangeText={setCity}
-        onSearch={() => handleSearch()}
-        loading={loading}
-      />
+      <Text style={styles.subtitle}>
+        Search Products or Users
+      </Text>
 
-      <View style={styles.header}>
-  <Text style={styles.heading}>Recent Searches</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          navigation.navigate('ProductSearch')
+        }>
+        <Text style={styles.buttonText}>
+           Search Products
+        </Text>
+      </TouchableOpacity>
 
-  <Pressable style={styles.clearButton} onPress={handleClearSearch}>
-    <Text style={styles.clearButtonText}>Clear</Text>
-  </Pressable>
-</View>
-
-      <FlatList
-        data={recentSearches}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        ListEmptyComponent={
-          <Text style={styles.emptyText}>No recent searches</Text>
-        }
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.item}
-            onPress={() => handleSearch(item)}
-          >
-            <Text style={styles.cityText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-      />
-    </SafeAreaView>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() =>
+          navigation.navigate('UserSearch')
+        }>
+        <Text style={styles.buttonText}>
+           Search Users
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -116,58 +54,36 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F5F5',
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 30,
+    fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 25,
-  },
-
- header: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginTop: 20,
-  marginBottom: 10,
-},
-
-heading: {
-  fontSize: 18,
-  fontWeight: '600',
-},
-
-clearButton: {
-  backgroundColor: '#EF4444',
-  paddingHorizontal: 14,
-  paddingVertical: 6,
-  borderRadius: 8,
-},
-
-clearButtonText: {
-  color: '#fff',
-  fontSize: 14,
-  fontWeight: '600',
-},
-
-  item: {
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
     marginBottom: 10,
   },
 
-  cityText: {
+  subtitle: {
+    textAlign: 'center',
     fontSize: 16,
+    color: '#666',
+    marginBottom: 40,
   },
 
-  emptyText: {
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginBottom: 16,
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
     textAlign: 'center',
-    color: 'gray',
-    marginTop: 30,
   },
 });
