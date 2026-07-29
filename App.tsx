@@ -1,11 +1,46 @@
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import AppNavigator from './src/navigations/AppNavigator'
+import React from 'react';
 
-export default function App() {
+import {
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
+
+import {
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+import AnimationDemoScreen from './src/screens/AnimationDemoScreen';
+
+
+const App = () => {
   return (
-   <NavigationContainer>
-     <AppNavigator/>
-   </NavigationContainer>
-  )
-}
+
+    <GestureHandlerRootView style={styles.container}>
+
+      <SafeAreaView style={styles.container}>
+
+        <StatusBar
+          barStyle="dark-content"
+        />
+
+        <AnimationDemoScreen />
+
+      </SafeAreaView>
+
+    </GestureHandlerRootView>
+
+  );
+};
+
+
+const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+  },
+
+});
+
+
+export default App;

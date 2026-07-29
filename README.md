@@ -1,235 +1,170 @@
-# Smart Search App
+# Day 14 – Animations & Gestures
 
-A React Native application built with **React Native CLI** and **TypeScript** that demonstrates advanced React concepts including **Custom Hooks**, **useRef**, and **useLayoutEffect**. The app allows users to search **Products** and **Users** using the DummyJSON API while showcasing reusable components and reusable business logic.
+## 📌 Objective
 
----
-
-# Features
-
-* 🔍 Search Products using the DummyJSON Products API.
-* 👤 Search Users using the DummyJSON Users API.
-* ⏱️ Debounced search to reduce unnecessary API calls.
-* 🔄 Reusable `useFetch` hook for API requests.
-* ⌨️ Auto-focus the search input using `useRef`.
-* 🧭 Dynamically update the screen title using `useLayoutEffect`.
-* 📦 Reusable UI components (`SearchBar`, `ProductCard`, `UserCard`).
-* 📃 Display results efficiently using `FlatList`.
-* ⏳ Loading indicator while fetching data.
-* ❌ Error handling for failed API requests.
-* 📭 Empty state when no matching results are found.
-* ✅ Fully typed using TypeScript interfaces and generics.
+Learn how animations and gestures work in React Native using the built-in **Animated API** and **PanResponder**. Understand the difference between the **JavaScript Thread** and the **UI Thread**, why animation performance matters, and how **React Native Reanimated** improves smoothness for complex animations.
 
 ---
 
-# Project Structure
+## 📚 Topics Covered
+
+- Animated API
+- Animated.Value
+- Animated.timing()
+- Animated.spring()
+- Animated.sequence()
+- useNativeDriver
+- PanResponder
+- Swipe Gesture
+- Tap Animation
+- Transform Animations
+- JavaScript Thread
+- UI Thread
+- Animation Performance
+- Gesture Handling
+
+---
+
+## 🛠️ Project Overview
+
+Built a single screen demonstrating different animation and gesture interactions.
+
+### Features
+
+### 1. Fade Animation
+- A box smoothly fades in and out.
+- Implemented using `Animated.timing()`.
+
+### 2. Tap Scale Animation
+- A card scales up when tapped.
+- Returns to its original size with a spring animation.
+- Implemented using:
+  - `Animated.spring()`
+  - `Animated.sequence()`
+
+### 3. Swipe to Delete
+- User can drag an item horizontally.
+- If swiped beyond a threshold, it remains partially open revealing the Delete area.
+- Otherwise, it springs back to its original position.
+- Implemented using:
+  - `PanResponder`
+  - `Animated.Value`
+  - `Animated.spring()`
+
+---
+
+## 📂 Folder Structure
 
 ```text
-src/
+src
 │
-├── components/
-│   ├── ProductCard.tsx
-│   ├── SearchBar.tsx
-│   └── UserCard.tsx
+├── components
+│   ├── FadeBox.tsx
+│   ├── ScaleCard.tsx
+│   └── SwipeableItem.tsx
 │
-├── constants/
-│   └── api.ts
+├── data
+│   └── tasks.ts
 │
-├── hooks/
-│   ├── useDebounce.ts
-│   └── useFetch.ts
-│
-├── navigation/
-│   ├── AppNavigator.tsx
-│   └── types.ts
-│
-├── screens/
-│   ├── HomeScreen.tsx
-│   ├── ProductSearchScreen.tsx
-│   └── UserSearchScreen.tsx
-│
-├── services/
-│   └── api.ts
-│
-└── types/
-    ├── product.ts
-    └── user.ts
+└── screens
+    └── AnimationDemoScreen.tsx
 ```
 
 ---
 
-# Technologies Used
+## 🔑 Key Concepts Used
 
-* React Native CLI
-* TypeScript
-* React Navigation
-* Axios
-* DummyJSON API
-* React Hooks
+### Animated API
+Used for creating smooth UI animations such as:
+- Fade In / Fade Out
+- Scale
+- Translation
+- Rotation
+- Opacity
 
----
+### Animated.Value
+Stores values that change during an animation.
 
-# Learnings
-
-## Custom Hooks
-
-* A **custom hook** is simply a JavaScript/TypeScript function whose name starts with **`use`** and that uses one or more React hooks internally.
-* Custom hooks allow reusable stateful logic to be shared across multiple components without duplicating code.
-* If the same combination of `useState`, `useEffect`, or other hooks appears in multiple components, it's a strong indication that the logic should be extracted into a custom hook.
-* Built two reusable custom hooks:
-
-  * **`useDebounce`** to delay updating the search value until the user stops typing, reducing unnecessary API requests.
-  * **`useFetch`** to encapsulate API fetching logic, including loading, error handling, and storing fetched data.
-* The same custom hooks were reused in both the **Product Search** and **User Search** screens.
-
----
-
-## useRef
-
-* `useRef` stores a mutable value that persists across re-renders without causing a component to re-render when the value changes.
-* Used `useRef` to store a reference to the search `TextInput`.
-* Automatically focused the search input when the screen opened by calling:
+Example:
 
 ```tsx
-inputRef.current?.focus();
+const opacity = useRef(new Animated.Value(0)).current;
 ```
 
-* `useRef` is commonly used for:
+### Animated.timing()
 
-  * Input focus
-  * Timer IDs (`setTimeout`, `setInterval`)
-  * Storing previous values
-  * Accessing native component methods
+Animates a value over a specified duration.
 
-* Unlike `useState`, updating a ref **does not trigger a re-render**, making it ideal for values that do not affect the UI.
-
----
-
-## useLayoutEffect
-
-* `useLayoutEffect` runs **synchronously after React has updated the UI but before the screen is painted**.
-* Used `useLayoutEffect` to:
-
-  * Dynamically update the navigation title.
-  * Focus the search input before the user sees the screen.
-* Compared with `useEffect`:
-
-  * `useEffect` runs **after** the screen is painted.
-  * `useLayoutEffect` runs **before** the screen is painted, making it useful for UI measurements or updates that should happen without visible flicker.
-
----
-
-
-## Generic Custom Hook
-
-* Implemented `useFetch<T>()` using TypeScript Generics.
-* The same hook can fetch different types of data while maintaining type safety.
-* Used it for both:
-
-  * Product API responses.
-  * User API responses.
-
----
-
-## Axios Instance
-
-* Created a reusable Axios instance using `axios.create()`.
-* Centralized common API configuration such as:
-
-  * Base URL
-  * Request timeout
-* This approach avoids repeating configuration across every API request and makes future enhancements like authentication headers and interceptors easier.
-
----
-
-## Debouncing
-
-* Implemented a reusable `useDebounce` hook.
-* Instead of calling the API on every keystroke, the app waits for the user to stop typing for a specified delay before making the request.
-* This improves application performance and reduces unnecessary network requests.
-
----
-
-## Reusable Components
-
-Created reusable UI components to improve maintainability:
-
-* `SearchBar`
-* `ProductCard`
-* `UserCard`
-
-These components keep the screen components clean and encourage code reuse.
-
----
-
-## Separation of Concerns
-
-Organized the project into separate folders for:
-
-* Components
-* Hooks
-* Navigation
-* Services
-* Types
-* Constants
-* Screens
-
-This makes the project easier to maintain, scale, and understand.
-
----
-
-## Deliverable
-
-Successfully built:
-
-* A custom `useDebounce` hook from scratch.
-* A custom `useFetch` hook from scratch.
-* Reused both hooks across multiple screens.
-* Implemented `useRef` for input focus.
-* Implemented `useLayoutEffect` for updating navigation options before the screen is painted.
-
----
-
-## Concept Check
-
-### What makes a function a hook instead of a regular function?
-
-A function becomes a custom hook when:
-
-* Its name starts with **`use`**.
-* It uses one or more React hooks (`useState`, `useEffect`, `useRef`, etc.) internally.
-* It encapsulates reusable stateful logic that can be shared across multiple components while following React's Rules of Hooks.
-
----
-
-### Why use `useRef` instead of `useState` for a timer ID?
-
-A timer ID is not displayed in the UI.
-
-If it were stored using `useState`, every update would trigger an unnecessary re-render.
-
-Using `useRef` allows the timer ID to persist across renders while avoiding extra re-renders, making it the preferred choice for values that don't affect the rendered output.
-
----
-
-# APIs Used
-
-### Search Products
-
-```text
-GET /products/search?q={query}
+```tsx
+Animated.timing(opacity, {
+  toValue: 1,
+  duration: 500,
+  useNativeDriver: true,
+}).start();
 ```
 
-### Search Users
+### Animated.spring()
 
-```text
-GET /users/search?q={query}
+Creates smooth spring-based animations.
+
+```tsx
+Animated.spring(scale, {
+  toValue: 1.2,
+  useNativeDriver: true,
+}).start();
 ```
 
-Base URL:
+### Animated.sequence()
 
-```text
-https://dummyjson.com
+Runs multiple animations one after another.
+
+```tsx
+Animated.sequence([
+  Animated.spring(...),
+  Animated.spring(...),
+]).start();
+```
+
+### PanResponder
+
+Used to detect drag and swipe gestures.
+
+Common callbacks:
+- `onMoveShouldSetPanResponder`
+- `onPanResponderMove`
+- `onPanResponderRelease`
+
+### useNativeDriver
+
+Runs supported animations on the native side for better performance.
+
+```tsx
+useNativeDriver: true
 ```
 
 ---
 
+## 📖 Learnings
+
+- Learned the basics of the **React Native Animated API**.
+- Used **Animated.Value**, `Animated.timing()`, `Animated.spring()`, and `Animated.sequence()` to create smooth animations.
+- Implemented **fade** and **tap scale** animations.
+- Learned **PanResponder** for handling swipe gestures.
+- Built a simple **swipe-to-delete** interaction.
+- Understood the purpose of **useNativeDriver** for improving animation performance.
+- Learned the difference between the **JavaScript Thread** and the **UI Thread** in React Native.
+- Understood that heavy JavaScript work (API calls, calculations, rendering large lists) can block the JS Thread and cause animation **jank**, especially on lower-end devices.
+- Learned that **React Native Reanimated** runs animations on the UI Thread, making complex animations and gestures smoother.
+- Understood when to use the **Animated API** (simple animations) and **Reanimated** (complex, gesture-driven animations).
+- Practiced creating gesture-based interactions using React Native's built-in tools.
+
+---
+
+## ✅ Deliverable
+
+A React Native screen showcasing:
+- Fade Animation
+- Tap Scale Animation
+- Swipe-to-Delete Gesture
+
+using the **Animated API** and **PanResponder**.
