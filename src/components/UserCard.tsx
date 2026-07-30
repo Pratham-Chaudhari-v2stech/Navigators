@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Image,
   StyleSheet,
@@ -32,7 +32,7 @@ const UserCard = ({ user }: UserCardProps) => {
   );
 };
 
-export default UserCard;
+export default memo(UserCard);
 
 const styles = StyleSheet.create({
   card: {

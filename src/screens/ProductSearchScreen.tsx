@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useLayoutEffect,
   useRef,
   useState,
@@ -34,9 +35,10 @@ const ProductSearchScreen = ({ navigation }: Props) => {
   const inputRef = useRef<TextInput>(null);
 
   const debouncedSearch = useDebounce(search, 500);
-const { data, loading, error } = useFetch<ProductResponse>(
-  `${BASE_URL}/products/search?q=${debouncedSearch}`
-);
+
+  const { data, loading, error } = useFetch<ProductResponse>(
+    `${BASE_URL}/products/search?q=${debouncedSearch}`
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,6 +47,13 @@ const { data, loading, error } = useFetch<ProductResponse>(
 
     inputRef.current?.focus();
   }, [navigation]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: ProductResponse['products'][number] }) => (
+      <ProductCard product={item} />
+    ),
+    []
+  );
 
   return (
     <View style={styles.container}>
@@ -72,11 +81,13 @@ const { data, loading, error } = useFetch<ProductResponse>(
         )}
 
       <FlatList
-        data={data?.products}
+        data={data?.products ?? []}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <ProductCard product={item} />
-        )}
+        renderItem={renderItem}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews
       />
     </View>
   );

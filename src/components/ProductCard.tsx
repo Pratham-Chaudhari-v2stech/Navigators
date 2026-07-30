@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Image,
   StyleSheet,
@@ -24,7 +24,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.title}
         </Text>
 
-        <Text style={styles.description} numberOfLines={2}>
+        <Text
+          style={styles.description}
+          numberOfLines={2}
+        >
           {product.description}
         </Text>
 
@@ -36,7 +39,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);
 
 const styles = StyleSheet.create({
   card: {

@@ -1,6 +1,6 @@
-# Smart Search App
+# Performance Optimization Demo
 
-A React Native application built with **React Native CLI** and **TypeScript** that demonstrates advanced React concepts including **Custom Hooks**, **useRef**, and **useLayoutEffect**. The app allows users to search **Products** and **Users** using the DummyJSON API while showcasing reusable components and reusable business logic.
+A React Native application built with **React Native CLI** and **TypeScript** to demonstrate common React and React Native performance optimization techniques. The project optimizes an existing search application by reducing unnecessary re-renders and improving `FlatList` performance.
 
 ---
 
@@ -8,16 +8,16 @@ A React Native application built with **React Native CLI** and **TypeScript** th
 
 * 🔍 Search Products using the DummyJSON Products API.
 * 👤 Search Users using the DummyJSON Users API.
-* ⏱️ Debounced search to reduce unnecessary API calls.
+* ⏱️ Debounced search using a reusable `useDebounce` hook.
 * 🔄 Reusable `useFetch` hook for API requests.
-* ⌨️ Auto-focus the search input using `useRef`.
-* 🧭 Dynamically update the screen title using `useLayoutEffect`.
-* 📦 Reusable UI components (`SearchBar`, `ProductCard`, `UserCard`).
-* 📃 Display results efficiently using `FlatList`.
+* ⚡ Optimized `FlatList` rendering.
+* 🧠 Reduced unnecessary re-renders using `React.memo`.
+* 🎯 Stable callback references using `useCallback`.
+* 📦 Reusable UI components.
 * ⏳ Loading indicator while fetching data.
-* ❌ Error handling for failed API requests.
-* 📭 Empty state when no matching results are found.
-* ✅ Fully typed using TypeScript interfaces and generics.
+* ❌ Error handling.
+* 📭 Empty state for no search results.
+* ✅ Fully typed with TypeScript.
 
 ---
 
@@ -63,151 +63,194 @@ src/
 * TypeScript
 * React Navigation
 * Axios
-* DummyJSON API
 * React Hooks
+* DummyJSON API
 
 ---
 
 # Learnings
 
-## Custom Hooks
+## React.memo
 
-* A **custom hook** is simply a JavaScript/TypeScript function whose name starts with **`use`** and that uses one or more React hooks internally.
-* Custom hooks allow reusable stateful logic to be shared across multiple components without duplicating code.
-* If the same combination of `useState`, `useEffect`, or other hooks appears in multiple components, it's a strong indication that the logic should be extracted into a custom hook.
-* Built two reusable custom hooks:
+* `React.memo` is a Higher Order Component (HOC) that prevents unnecessary re-rendering of a component.
+* A memoized component re-renders only when:
 
-  * **`useDebounce`** to delay updating the search value until the user stops typing, reducing unnecessary API requests.
-  * **`useFetch`** to encapsulate API fetching logic, including loading, error handling, and storing fetched data.
-* The same custom hooks were reused in both the **Product Search** and **User Search** screens.
+  * Its own state changes.
+  * Its props change.
+* If a parent component re-renders but the child receives the same props, `React.memo` skips rendering the child.
+* Used `React.memo` to optimize:
 
----
+  * `ProductCard`
+  * `UserCard`
 
-## useRef
-
-* `useRef` stores a mutable value that persists across re-renders without causing a component to re-render when the value changes.
-* Used `useRef` to store a reference to the search `TextInput`.
-* Automatically focused the search input when the screen opened by calling:
+Example:
 
 ```tsx
-inputRef.current?.focus();
+export default memo(ProductCard);
 ```
 
-* `useRef` is commonly used for:
+---
 
-  * Input focus
-  * Timer IDs (`setTimeout`, `setInterval`)
-  * Storing previous values
-  * Accessing native component methods
+## useCallback
 
-* Unlike `useState`, updating a ref **does not trigger a re-render**, making it ideal for values that do not affect the UI.
+* `useCallback` memoizes a function and preserves its reference between renders.
+* Without `useCallback`, a new function is created on every render.
+* This is useful when passing callbacks to memoized child components or components like `FlatList`.
+
+Used for:
+
+```tsx
+const renderItem = useCallback(
+  ({ item }) => (
+    <ProductCard product={item} />
+  ),
+  []
+);
+```
+
+Benefits:
+
+* Stable function reference.
+* Prevents unnecessary updates caused by new callback references.
+* Works well with `React.memo`.
 
 ---
 
-## useLayoutEffect
+## FlatList Performance Optimizations
 
-* `useLayoutEffect` runs **synchronously after React has updated the UI but before the screen is painted**.
-* Used `useLayoutEffect` to:
+Optimized `FlatList` using:
 
-  * Dynamically update the navigation title.
-  * Focus the search input before the user sees the screen.
-* Compared with `useEffect`:
+### initialNumToRender
 
-  * `useEffect` runs **after** the screen is painted.
-  * `useLayoutEffect` runs **before** the screen is painted, making it useful for UI measurements or updates that should happen without visible flicker.
+```tsx
+initialNumToRender={10}
+```
 
----
-
-
-## Generic Custom Hook
-
-* Implemented `useFetch<T>()` using TypeScript Generics.
-* The same hook can fetch different types of data while maintaining type safety.
-* Used it for both:
-
-  * Product API responses.
-  * User API responses.
+* Controls how many items are rendered when the list first loads.
+* Improves initial loading performance.
 
 ---
 
-## Axios Instance
+### maxToRenderPerBatch
 
-* Created a reusable Axios instance using `axios.create()`.
-* Centralized common API configuration such as:
+```tsx
+maxToRenderPerBatch={10}
+```
 
-  * Base URL
-  * Request timeout
-* This approach avoids repeating configuration across every API request and makes future enhancements like authentication headers and interceptors easier.
-
----
-
-## Debouncing
-
-* Implemented a reusable `useDebounce` hook.
-* Instead of calling the API on every keystroke, the app waits for the user to stop typing for a specified delay before making the request.
-* This improves application performance and reduces unnecessary network requests.
+* Controls how many new items are rendered in one rendering batch while scrolling.
+* Prevents rendering too many items at once.
 
 ---
 
-## Reusable Components
+### windowSize
 
-Created reusable UI components to improve maintainability:
+```tsx
+windowSize={5}
+```
 
-* `SearchBar`
-* `ProductCard`
-* `UserCard`
-
-These components keep the screen components clean and encourage code reuse.
-
----
-
-## Separation of Concerns
-
-Organized the project into separate folders for:
-
-* Components
-* Hooks
-* Navigation
-* Services
-* Types
-* Constants
-* Screens
-
-This makes the project easier to maintain, scale, and understand.
+* Specifies how many screenfuls of items should remain mounted around the visible area.
+* Larger values improve scroll smoothness.
+* Smaller values reduce memory usage.
 
 ---
 
-## Deliverable
+### removeClippedSubviews
 
-Successfully built:
+```tsx
+removeClippedSubviews
+```
 
-* A custom `useDebounce` hook from scratch.
-* A custom `useFetch` hook from scratch.
-* Reused both hooks across multiple screens.
-* Implemented `useRef` for input focus.
-* Implemented `useLayoutEffect` for updating navigation options before the screen is painted.
-
----
-
-## Concept Check
-
-### What makes a function a hook instead of a regular function?
-
-A function becomes a custom hook when:
-
-* Its name starts with **`use`**.
-* It uses one or more React hooks (`useState`, `useEffect`, `useRef`, etc.) internally.
-* It encapsulates reusable stateful logic that can be shared across multiple components while following React's Rules of Hooks.
+* Removes native views that are far outside the visible screen.
+* Helps reduce memory usage, especially on Android and large lists.
 
 ---
 
-### Why use `useRef` instead of `useState` for a timer ID?
+### keyExtractor
 
-A timer ID is not displayed in the UI.
+```tsx
+keyExtractor={item => item.id.toString()}
+```
 
-If it were stored using `useState`, every update would trigger an unnecessary re-render.
+* Provides a unique key for each list item.
+* Helps React efficiently identify, update, and reuse list items.
 
-Using `useRef` allows the timer ID to persist across renders while avoiding extra re-renders, making it the preferred choice for values that don't affect the rendered output.
+---
+
+## Avoiding Inline Functions
+
+Instead of:
+
+```tsx
+renderItem={({ item }) => (
+  <ProductCard product={item} />
+)}
+```
+
+Used:
+
+```tsx
+const renderItem = useCallback(
+  ({ item }) => (
+    <ProductCard product={item} />
+  ),
+  []
+);
+```
+
+This keeps the callback reference stable across renders and avoids creating a new function on every render.
+
+---
+
+## FlatList Virtualization
+
+Learned that `FlatList` is already optimized by default using virtualization.
+
+Instead of rendering every item in the dataset, it renders only the visible items and a small buffer around them.
+
+The optimization props fine-tune this behavior for large or complex lists.
+
+---
+
+## getItemLayout
+
+Learned that `getItemLayout` is useful only when every list item has a fixed size.
+
+Since the cards in this project are not guaranteed to have a fixed height, this optimization was intentionally not implemented.
+
+---
+
+# Deliverable
+
+Successfully optimized an existing search application by:
+
+* Implementing `React.memo` for reusable card components.
+* Using `useCallback` to memoize `FlatList`'s `renderItem`.
+* Optimizing `FlatList` using:
+
+  * `initialNumToRender`
+  * `maxToRenderPerBatch`
+  * `windowSize`
+  * `removeClippedSubviews`
+* Improved rendering efficiency by avoiding inline callback functions.
+* Documented why `getItemLayout` was not suitable for this project.
+
+---
+
+# Concept Check
+
+## Why does passing an inline function as a prop cause unnecessary re-renders?
+
+Every time a component renders, an inline function creates a new function object with a different reference. Components that compare props by reference (such as `React.memo`) see it as a changed prop, which can lead to unnecessary re-renders. Using `useCallback` preserves the same function reference until its dependencies change.
+
+---
+
+## Can `useMemo` hurt performance?
+
+Yes.
+
+`useMemo` itself has a cost because React must store the cached value and compare dependency arrays on every render.
+
+Using `useMemo` for inexpensive calculations or everywhere "just in case" can add unnecessary overhead and make an application slower instead of faster.
 
 ---
 
@@ -225,11 +268,8 @@ GET /products/search?q={query}
 GET /users/search?q={query}
 ```
 
-Base URL:
+Base URL
 
 ```text
 https://dummyjson.com
 ```
-
----
-

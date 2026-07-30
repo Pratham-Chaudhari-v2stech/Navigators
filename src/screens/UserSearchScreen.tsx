@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useLayoutEffect,
   useRef,
   useState,
@@ -36,8 +37,8 @@ const UserSearchScreen = ({ navigation }: Props) => {
   const debouncedSearch = useDebounce(search, 500);
 
   const { data, loading, error } = useFetch<UserResponse>(
-  `${BASE_URL}/users/search?q=${debouncedSearch}`
-);
+    `${BASE_URL}/users/search?q=${debouncedSearch}`
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -46,6 +47,13 @@ const UserSearchScreen = ({ navigation }: Props) => {
 
     inputRef.current?.focus();
   }, [navigation]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: UserResponse['users'][number] }) => (
+      <UserCard user={item} />
+    ),
+    []
+  );
 
   return (
     <View style={styles.container}>
@@ -73,11 +81,13 @@ const UserSearchScreen = ({ navigation }: Props) => {
         )}
 
       <FlatList
-        data={data?.users}
+        data={data?.users ?? []}
         keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <UserCard user={item} />
-        )}
+        renderItem={renderItem}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews
       />
     </View>
   );
