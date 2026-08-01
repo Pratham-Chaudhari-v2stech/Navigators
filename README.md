@@ -1,145 +1,187 @@
-# Debugging & Error Handling
+# Testing Basics (Jest & React Native Testing Library)
 
-## 🎯 Objective
+## Overview
 
-Learn how to debug React Native applications and prevent complete application crashes by using an **Error Boundary** with a fallback UI.
+This project demonstrates the basics of unit testing in a React Native application using **Jest** and **React Native Testing Library**. The focus of this assignment is to understand how to write and execute tests for application logic instead of manually verifying behavior every time changes are made.
 
----
-
-## 📚 Topics Covered
-
-- React Native Debugger / Flipper
-- Console logging for debugging
-- Error Boundaries
-- Render-time vs Event-handler errors
-- Fallback UI
+As the deliverable, a unit test suite was written for a custom `useDebounce` hook to verify its behavior under different scenarios.
 
 ---
 
-## ✅ Deliverable
+## Objectives
 
-Implemented an **Error Boundary** that catches a simulated render crash and displays a friendly fallback screen instead of letting the application crash.
-
----
-
-## ✨ Features
-
-- ErrorBoundary class component
-- `getDerivedStateFromError()` to update the UI after an error
-- `componentDidCatch()` to log error details
-- **"Simulate Render Crash"** button for testing
-- Custom fallback UI with a **"Try Again"** button
+* Understand the purpose of unit testing.
+* Learn the fundamentals of Jest.
+* Learn the basics of React Native Testing Library.
+* Write and execute the first passing unit test.
+* Verify hook behavior using fake timers.
 
 ---
 
-## 📁 Project Structure
+## Technologies Used
+
+* React Native
+* TypeScript
+* Jest
+* React Native Testing Library
+
+---
+
+## Deliverable
+
+A unit test suite was created for the custom `useDebounce` hook.
+
+### Files
 
 ```text
-App
-└── ErrorBoundary
-    └── NavigationContainer
-        └── AppNavigator
-            └── Screens
+src/
+└── hooks/
+    ├── useDebounce.ts
+    └── useDebounce.test.ts
 ```
 
 ---
 
-## ⚙️ How It Works
+## What Was Tested
 
-1. User presses **Simulate Render Crash**.
-2. The screen intentionally throws a render error.
-3. **ErrorBoundary** catches the error.
-4. React renders the fallback UI.
-5. The application continues running instead of crashing.
+### 1. Initial Value
 
----
+Verified that the hook immediately returns the initial value passed to it.
 
-## 🧠 Concept Check
+**Expected Result**
 
-### ❓ Why doesn't an Error Boundary catch errors thrown inside event handlers?
+```text
+Input: "Hello"
 
-Error Boundaries only catch errors that occur while React is **rendering components**, during **lifecycle methods**, or inside **constructors**.
+↓
 
-Event handlers such as `onPress`, `onChange`, etc., execute **after rendering**, so they are **not captured** by an Error Boundary. These errors should be handled using **`try...catch`** blocks.
+Output: "Hello"
+```
 
 ---
 
-### ❓ Why is a fallback UI useful?
+### 2. Debounced Update
 
-Instead of displaying a blank screen or terminating the application, a fallback UI provides users with a meaningful message and a way to recover from the error. This improves the overall user experience and helps developers debug issues more effectively.
+Verified that the hook updates its value only after the specified delay.
 
----
+**Flow**
 
-# 📖 Learnings
+```text
+Initial Value
 
-## Error Boundaries
+↓
 
-- Learned that an **Error Boundary** is a special React component that catches JavaScript errors occurring during rendering.
-- Understood that Error Boundaries prevent the entire application from crashing by displaying a fallback UI.
-- Learned that Error Boundaries **only catch render-time errors**.
+Hello
 
----
+↓
 
-## What Error Boundaries Do NOT Catch
+Value changes to World
 
-Error Boundaries **do not** catch:
+↓
 
-- Errors inside event handlers (`onPress`, `onChange`, etc.)
-- Errors inside asynchronous code (`setTimeout`, `Promises`, `async/await`)
-- Server-side rendering errors
-- Errors thrown inside the Error Boundary itself
+Wait 500ms
 
-These scenarios require manual error handling using `try...catch`.
+↓
 
----
+Hook updates
 
-## Debugging
+↓
 
-- Practiced debugging React Native applications using:
-  - `console.log()`
-  - React Native Debugger
-  - Flipper
-
-- Learned how logging helps identify the source of application issues.
+Result = World
+```
 
 ---
 
-## Important Lifecycle Methods
+### 3. Timer Cleanup
 
-### `static getDerivedStateFromError()`
+Verified that when the value changes before the delay completes, the previous timer is cancelled and only the latest value is applied.
 
-- Invoked after a child component throws an error.
-- Updates the component state.
-- Displays the fallback UI.
+**Flow**
 
-### `componentDidCatch()`
+```text
+A
 
-- Called after an error has been caught.
-- Used for:
-  - Logging errors
-  - Sending crash reports
-  - Analytics (Crashlytics, Sentry, etc.)
+↓
+
+B
+
+↓
+
+300ms
+
+↓
+
+C
+
+↓
+
+Old timer cancelled
+
+↓
+
+500ms
+
+↓
+
+Result = C
+```
 
 ---
 
-## Class Components vs Functional Components
+## Test Execution
 
-- Learned that Error Boundaries currently require **Class Components**.
-- React only supports the lifecycle methods required for Error Boundaries (`getDerivedStateFromError()` and `componentDidCatch()`) in class components.
-- Functional components cannot act as Error Boundaries unless a third-party library (e.g., `react-error-boundary`) is used.
+Run all tests:
 
----
+```bash
+npm test
+```
 
-## Practical Implementation
+Run only the debounce test:
 
-- Created an Error Boundary component.
-- Simulated a render crash using a button.
-- Verified that the Error Boundary caught the error.
-- Displayed a custom fallback UI with a **"Try Again"** button.
-- Prevented the application from crashing completely.
+```bash
+npx jest src/hooks/useDebounce.test.ts
+```
 
 ---
 
-## 🎯 Outcome
+## Key Testing Concepts Learned
 
-Successfully implemented a reusable **Error Boundary** that catches simulated render crashes, logs the error, and displays a custom recovery screen instead of allowing the application to crash.
+### Jest
+
+* `describe()` groups related test cases.
+* `test()` defines an individual test scenario.
+* `expect()` verifies the expected output.
+* Fake timers allow testing asynchronous code without waiting in real time.
+
+### React Native Testing Library
+
+* `renderHook()` renders a custom hook in a test environment.
+* `rerender()` simulates the hook receiving updated values.
+* `result.current` provides the hook's latest returned value.
+* `act()` ensures React processes state updates before assertions are made.
+
+---
+
+# Learnings
+
+During this assignment, I learned:
+
+* Understood the purpose and importance of unit testing in React Native.
+* Learned how Jest is used to write and execute automated tests.
+* Learned the difference between testing logic and manually verifying application behavior.
+* Understood how `describe()`, `test()`, and `expect()` work together to structure test cases.
+* Learned how `renderHook()` allows custom React hooks to be tested without creating a component.
+* Learned that `result.current` always contains the latest value returned by a hook.
+* Understood how `rerender()` simulates new props or updated values.
+* Learned why `act()` is required when a hook updates React state.
+* Learned how fake timers (`jest.useFakeTimers()`) make timer-based code deterministic and fast to test.
+* Understood how `jest.advanceTimersByTime()` simulates the passage of time instantly.
+* Learned how cleanup functions (`clearTimeout`) prevent stale timers from updating state.
+* Gained a clear understanding of how a debounce hook delays updates until the user stops changing the input.
+* Successfully wrote and executed the first passing unit tests for a custom React hook.
+
+---
+
+## Outcome
+
+This assignment provided a practical introduction to testing in React Native. It demonstrated how to verify hook behavior using Jest and React Native Testing Library, laying the foundation for testing more complex components and application features in future assignments.
