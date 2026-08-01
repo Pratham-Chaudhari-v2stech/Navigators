@@ -6,9 +6,10 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
-  Text,
+ Text,
   TextInput,
   View,
 } from 'react-native';
@@ -31,6 +32,7 @@ type Props = NativeStackScreenProps<
 
 const ProductSearchScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
+  const [crash, setCrash] = useState(false);
 
   const inputRef = useRef<TextInput>(null);
 
@@ -48,6 +50,10 @@ const ProductSearchScreen = ({ navigation }: Props) => {
     inputRef.current?.focus();
   }, [navigation]);
 
+  if (crash) {
+    throw new Error('Simulated Render Crash!');
+  }
+
   const renderItem = useCallback(
     ({ item }: { item: ProductResponse['products'][number] }) => (
       <ProductCard product={item} />
@@ -64,11 +70,18 @@ const ProductSearchScreen = ({ navigation }: Props) => {
         placeholder="Search products..."
       />
 
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Simulate Render Crash"
+          onPress={() => setCrash(true)}
+        />
+      </View>
+
       {loading && <ActivityIndicator size="large" />}
 
-      {error && (
+      {Boolean(error) && (
         <Text style={styles.error}>
-          Something went wrong.
+          Something went wrong while fetching products.
         </Text>
       )}
 
@@ -99,6 +112,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+  },
+
+  buttonContainer: {
+    marginVertical: 12,
   },
 
   error: {

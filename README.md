@@ -1,275 +1,145 @@
-# Performance Optimization Demo
+# Debugging & Error Handling
 
-A React Native application built with **React Native CLI** and **TypeScript** to demonstrate common React and React Native performance optimization techniques. The project optimizes an existing search application by reducing unnecessary re-renders and improving `FlatList` performance.
+## 🎯 Objective
 
----
-
-# Features
-
-* 🔍 Search Products using the DummyJSON Products API.
-* 👤 Search Users using the DummyJSON Users API.
-* ⏱️ Debounced search using a reusable `useDebounce` hook.
-* 🔄 Reusable `useFetch` hook for API requests.
-* ⚡ Optimized `FlatList` rendering.
-* 🧠 Reduced unnecessary re-renders using `React.memo`.
-* 🎯 Stable callback references using `useCallback`.
-* 📦 Reusable UI components.
-* ⏳ Loading indicator while fetching data.
-* ❌ Error handling.
-* 📭 Empty state for no search results.
-* ✅ Fully typed with TypeScript.
+Learn how to debug React Native applications and prevent complete application crashes by using an **Error Boundary** with a fallback UI.
 
 ---
 
-# Project Structure
+## 📚 Topics Covered
+
+- React Native Debugger / Flipper
+- Console logging for debugging
+- Error Boundaries
+- Render-time vs Event-handler errors
+- Fallback UI
+
+---
+
+## ✅ Deliverable
+
+Implemented an **Error Boundary** that catches a simulated render crash and displays a friendly fallback screen instead of letting the application crash.
+
+---
+
+## ✨ Features
+
+- ErrorBoundary class component
+- `getDerivedStateFromError()` to update the UI after an error
+- `componentDidCatch()` to log error details
+- **"Simulate Render Crash"** button for testing
+- Custom fallback UI with a **"Try Again"** button
+
+---
+
+## 📁 Project Structure
 
 ```text
-src/
-│
-├── components/
-│   ├── ProductCard.tsx
-│   ├── SearchBar.tsx
-│   └── UserCard.tsx
-│
-├── constants/
-│   └── api.ts
-│
-├── hooks/
-│   ├── useDebounce.ts
-│   └── useFetch.ts
-│
-├── navigation/
-│   ├── AppNavigator.tsx
-│   └── types.ts
-│
-├── screens/
-│   ├── HomeScreen.tsx
-│   ├── ProductSearchScreen.tsx
-│   └── UserSearchScreen.tsx
-│
-├── services/
-│   └── api.ts
-│
-└── types/
-    ├── product.ts
-    └── user.ts
+App
+└── ErrorBoundary
+    └── NavigationContainer
+        └── AppNavigator
+            └── Screens
 ```
 
 ---
 
-# Technologies Used
+## ⚙️ How It Works
 
-* React Native CLI
-* TypeScript
-* React Navigation
-* Axios
-* React Hooks
-* DummyJSON API
-
----
-
-# Learnings
-
-## React.memo
-
-* `React.memo` is a Higher Order Component (HOC) that prevents unnecessary re-rendering of a component.
-* A memoized component re-renders only when:
-
-  * Its own state changes.
-  * Its props change.
-* If a parent component re-renders but the child receives the same props, `React.memo` skips rendering the child.
-* Used `React.memo` to optimize:
-
-  * `ProductCard`
-  * `UserCard`
-
-Example:
-
-```tsx
-export default memo(ProductCard);
-```
+1. User presses **Simulate Render Crash**.
+2. The screen intentionally throws a render error.
+3. **ErrorBoundary** catches the error.
+4. React renders the fallback UI.
+5. The application continues running instead of crashing.
 
 ---
 
-## useCallback
+## 🧠 Concept Check
 
-* `useCallback` memoizes a function and preserves its reference between renders.
-* Without `useCallback`, a new function is created on every render.
-* This is useful when passing callbacks to memoized child components or components like `FlatList`.
+### ❓ Why doesn't an Error Boundary catch errors thrown inside event handlers?
 
-Used for:
+Error Boundaries only catch errors that occur while React is **rendering components**, during **lifecycle methods**, or inside **constructors**.
 
-```tsx
-const renderItem = useCallback(
-  ({ item }) => (
-    <ProductCard product={item} />
-  ),
-  []
-);
-```
-
-Benefits:
-
-* Stable function reference.
-* Prevents unnecessary updates caused by new callback references.
-* Works well with `React.memo`.
+Event handlers such as `onPress`, `onChange`, etc., execute **after rendering**, so they are **not captured** by an Error Boundary. These errors should be handled using **`try...catch`** blocks.
 
 ---
 
-## FlatList Performance Optimizations
+### ❓ Why is a fallback UI useful?
 
-Optimized `FlatList` using:
-
-### initialNumToRender
-
-```tsx
-initialNumToRender={10}
-```
-
-* Controls how many items are rendered when the list first loads.
-* Improves initial loading performance.
+Instead of displaying a blank screen or terminating the application, a fallback UI provides users with a meaningful message and a way to recover from the error. This improves the overall user experience and helps developers debug issues more effectively.
 
 ---
 
-### maxToRenderPerBatch
+# 📖 Learnings
 
-```tsx
-maxToRenderPerBatch={10}
-```
+## Error Boundaries
 
-* Controls how many new items are rendered in one rendering batch while scrolling.
-* Prevents rendering too many items at once.
-
----
-
-### windowSize
-
-```tsx
-windowSize={5}
-```
-
-* Specifies how many screenfuls of items should remain mounted around the visible area.
-* Larger values improve scroll smoothness.
-* Smaller values reduce memory usage.
+- Learned that an **Error Boundary** is a special React component that catches JavaScript errors occurring during rendering.
+- Understood that Error Boundaries prevent the entire application from crashing by displaying a fallback UI.
+- Learned that Error Boundaries **only catch render-time errors**.
 
 ---
 
-### removeClippedSubviews
+## What Error Boundaries Do NOT Catch
 
-```tsx
-removeClippedSubviews
-```
+Error Boundaries **do not** catch:
 
-* Removes native views that are far outside the visible screen.
-* Helps reduce memory usage, especially on Android and large lists.
+- Errors inside event handlers (`onPress`, `onChange`, etc.)
+- Errors inside asynchronous code (`setTimeout`, `Promises`, `async/await`)
+- Server-side rendering errors
+- Errors thrown inside the Error Boundary itself
 
----
-
-### keyExtractor
-
-```tsx
-keyExtractor={item => item.id.toString()}
-```
-
-* Provides a unique key for each list item.
-* Helps React efficiently identify, update, and reuse list items.
+These scenarios require manual error handling using `try...catch`.
 
 ---
 
-## Avoiding Inline Functions
+## Debugging
 
-Instead of:
+- Practiced debugging React Native applications using:
+  - `console.log()`
+  - React Native Debugger
+  - Flipper
 
-```tsx
-renderItem={({ item }) => (
-  <ProductCard product={item} />
-)}
-```
-
-Used:
-
-```tsx
-const renderItem = useCallback(
-  ({ item }) => (
-    <ProductCard product={item} />
-  ),
-  []
-);
-```
-
-This keeps the callback reference stable across renders and avoids creating a new function on every render.
+- Learned how logging helps identify the source of application issues.
 
 ---
 
-## FlatList Virtualization
+## Important Lifecycle Methods
 
-Learned that `FlatList` is already optimized by default using virtualization.
+### `static getDerivedStateFromError()`
 
-Instead of rendering every item in the dataset, it renders only the visible items and a small buffer around them.
+- Invoked after a child component throws an error.
+- Updates the component state.
+- Displays the fallback UI.
 
-The optimization props fine-tune this behavior for large or complex lists.
+### `componentDidCatch()`
 
----
-
-## getItemLayout
-
-Learned that `getItemLayout` is useful only when every list item has a fixed size.
-
-Since the cards in this project are not guaranteed to have a fixed height, this optimization was intentionally not implemented.
-
----
-
-# Deliverable
-
-Successfully optimized an existing search application by:
-
-* Implementing `React.memo` for reusable card components.
-* Using `useCallback` to memoize `FlatList`'s `renderItem`.
-* Optimizing `FlatList` using:
-
-  * `initialNumToRender`
-  * `maxToRenderPerBatch`
-  * `windowSize`
-  * `removeClippedSubviews`
-* Improved rendering efficiency by avoiding inline callback functions.
-* Documented why `getItemLayout` was not suitable for this project.
+- Called after an error has been caught.
+- Used for:
+  - Logging errors
+  - Sending crash reports
+  - Analytics (Crashlytics, Sentry, etc.)
 
 ---
 
-# Concept Check
+## Class Components vs Functional Components
 
-## Why does passing an inline function as a prop cause unnecessary re-renders?
-
-Every time a component renders, an inline function creates a new function object with a different reference. Components that compare props by reference (such as `React.memo`) see it as a changed prop, which can lead to unnecessary re-renders. Using `useCallback` preserves the same function reference until its dependencies change.
-
----
-
-## Can `useMemo` hurt performance?
-
-Yes.
-
-`useMemo` itself has a cost because React must store the cached value and compare dependency arrays on every render.
-
-Using `useMemo` for inexpensive calculations or everywhere "just in case" can add unnecessary overhead and make an application slower instead of faster.
+- Learned that Error Boundaries currently require **Class Components**.
+- React only supports the lifecycle methods required for Error Boundaries (`getDerivedStateFromError()` and `componentDidCatch()`) in class components.
+- Functional components cannot act as Error Boundaries unless a third-party library (e.g., `react-error-boundary`) is used.
 
 ---
 
-# APIs Used
+## Practical Implementation
 
-### Search Products
+- Created an Error Boundary component.
+- Simulated a render crash using a button.
+- Verified that the Error Boundary caught the error.
+- Displayed a custom fallback UI with a **"Try Again"** button.
+- Prevented the application from crashing completely.
 
-```text
-GET /products/search?q={query}
-```
+---
 
-### Search Users
+## 🎯 Outcome
 
-```text
-GET /users/search?q={query}
-```
-
-Base URL
-
-```text
-https://dummyjson.com
-```
+Successfully implemented a reusable **Error Boundary** that catches simulated render crashes, logs the error, and displays a custom recovery screen instead of allowing the application to crash.

@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -31,6 +32,7 @@ type Props = NativeStackScreenProps<
 
 const UserSearchScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
+  const [crash, setCrash] = useState(false);
 
   const inputRef = useRef<TextInput>(null);
 
@@ -48,6 +50,11 @@ const UserSearchScreen = ({ navigation }: Props) => {
     inputRef.current?.focus();
   }, [navigation]);
 
+  // Simulate a render crash
+  if (crash) {
+    throw new Error('Simulated Render Crash!');
+  }
+
   const renderItem = useCallback(
     ({ item }: { item: UserResponse['users'][number] }) => (
       <UserCard user={item} />
@@ -64,11 +71,18 @@ const UserSearchScreen = ({ navigation }: Props) => {
         placeholder="Search users..."
       />
 
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Simulate Render Crash"
+          onPress={() => setCrash(true)}
+        />
+      </View>
+
       {loading && <ActivityIndicator size="large" />}
 
       {Boolean(error) && (
         <Text style={styles.error}>
-          Something went wrong.
+          Something went wrong while fetching users.
         </Text>
       )}
 
@@ -99,6 +113,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+  },
+
+  buttonContainer: {
+    marginVertical: 12,
   },
 
   error: {

@@ -1,11 +1,15 @@
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import AppNavigator from './src/navigations/AppNavigator'
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+
+import AppNavigator from './src/navigations/AppNavigator';
+import ErrorBoundary from './src/utils/ErrorBoundary'; 
 
 export default function App() {
   return (
-   <NavigationContainer>
-     <AppNavigator/>
-   </NavigationContainer>
-  )
+    <ErrorBoundary>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </ErrorBoundary>
+  );
 }
