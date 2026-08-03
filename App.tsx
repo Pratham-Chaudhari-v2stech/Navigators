@@ -1,15 +1,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
-import AppNavigator from './src/navigations/AppNavigator';
-import ErrorBoundary from './src/utils/ErrorBoundary'; 
+import './src/i18n';
+import AppNavigator from './src/navigation/AppNavigator';
 
-export default function App() {
+const App = () => {
   return (
-    <ErrorBoundary>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </ErrorBoundary>
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
   );
-}
+};
+
+export default App;

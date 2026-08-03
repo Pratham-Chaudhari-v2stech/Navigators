@@ -1,0 +1,14 @@
+{
+  "welcome": "स्वागत है",
+  "loginToContinue": "जारी रखने के लिए लॉगिन करें",
+  "email": "ईमेल",
+  "emailPlaceholder": "अपना ईमेल दर्ज करें",
+  "password": "पासवर्ड",
+  "passwordPlaceholder": "अपना पासवर्ड दर्ज करें",
+  "login": "लॉगिन",
+  "forgotPassword": "पासवर्ड भूल गए?",
+  "language": "भाषा",
+  "english": "अंग्रेज़ी",
+  "hindi": "हिन्दी",
+  "changeLanguage": "भाषा बदलें"
+}

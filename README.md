@@ -1,187 +1,232 @@
-# Testing Basics (Jest & React Native Testing Library)
+# Internationalization (i18n) & Accessibility
 
-## Overview
+## 📌 Overview
 
-This project demonstrates the basics of unit testing in a React Native application using **Jest** and **React Native Testing Library**. The focus of this assignment is to understand how to write and execute tests for application logic instead of manually verifying behavior every time changes are made.
+This project demonstrates how to build a React Native application that supports multiple languages using **react-i18next** and implements basic **accessibility** features for users who rely on assistive technologies such as TalkBack (Android) and VoiceOver (iOS).
 
-As the deliverable, a unit test suite was written for a custom `useDebounce` hook to verify its behavior under different scenarios.
-
----
-
-## Objectives
-
-* Understand the purpose of unit testing.
-* Learn the fundamentals of Jest.
-* Learn the basics of React Native Testing Library.
-* Write and execute the first passing unit test.
-* Verify hook behavior using fake timers.
+The application includes a simple Login screen where users can switch between **English** and **Hindi** at runtime without restarting the application. It also demonstrates the use of accessibility labels and roles to improve usability.
 
 ---
 
-## Technologies Used
+## 🚀 Features
 
-* React Native
+* 🌐 Internationalization using **react-i18next**
+* 🇮🇳 English and Hindi language support
+* 🔄 Runtime language switching
+* 📄 Translation files using JSON
+* ♿ Basic Accessibility support
+* 🏷️ accessibilityLabel for inputs and buttons
+* 🎯 accessibilityRole for buttons and headers
+* 🧩 Reusable UI Components
+* 🧭 React Navigation integration
+* 📱 Built with React Native CLI + TypeScript
+
+---
+
+## 📂 Folder Structure
+
+```text
+Day18-I18n-Accessibility/
+│
+├── android/
+├── ios/
+│
+├── src/
+│   ├── assets/
+│   │   ├── images/
+│   │   └── icons/
+│   │
+│   ├── components/
+│   │   ├── CustomButton.tsx
+│   │   ├── CustomInput.tsx
+│   │   ├── LanguageSwitcher.tsx
+│   │   └── ScreenHeader.tsx
+│   │
+│   ├── constants/
+│   │   ├── Colors.ts
+│   │   └── Fonts.ts
+│   │
+│   ├── i18n/
+│   │   └── index.ts
+│   │
+│   ├── locales/
+│   │   ├── en.json
+│   │   └── hi.json
+│   │
+│   ├── navigation/
+│   │   ├── AppNavigator.tsx
+│   │   └── navigationTypes.ts
+│   │
+│   ├── screens/
+│   │   ├── LoginScreen.tsx
+│   │   └── LoginScreen.styles.ts
+│   │
+│   ├── utils/
+│   │   ├── accessibility.ts
+│   │   └── helpers.ts
+│   │
+│   └── App.tsx
+│
+├── index.js
+├── app.json
+├── package.json
+├── package-lock.json
+└── README.md
+```
+
+---
+
+## 📱 Screen
+
+### Login Screen
+
+* Welcome Header
+* Email Input
+* Password Input
+* Forgot Password
+* Login Button
+* Language Switcher (English / Hindi)
+
+---
+
+## 🌍 Internationalization
+
+This project uses **react-i18next** to provide multilingual support.
+
+### Supported Languages
+
+* 🇺🇸 English
+* 🇮🇳 Hindi
+
+Language can be switched at runtime using the Language Switcher component.
+
+Translations are stored inside:
+
+```text
+src/locales/
+├── en.json
+└── hi.json
+```
+
+Example:
+
+```json
+{
+  "login": "Login"
+}
+```
+
+```json
+{
+  "login": "लॉगिन"
+}
+```
+
+Instead of hardcoding text, components use translation keys:
+
+```tsx
+t('login')
+```
+
+---
+
+## ♿ Accessibility
+
+The following accessibility features were implemented:
+
+* accessibilityLabel
+* accessibilityRole
+* accessibilityHint
+* Header accessibility role
+* Button accessibility role
+* Accessible TextInput fields
+
+Examples:
+
+```tsx
+accessibilityLabel="Email Input"
+```
+
+```tsx
+accessibilityRole="button"
+```
+
+These improvements help screen readers describe UI elements correctly.
+
+---
+
+## 🛠️ Technologies Used
+
+* React Native CLI
 * TypeScript
-* Jest
-* React Native Testing Library
+* React Navigation
+* i18next
+* react-i18next
+* react-native-localize
 
 ---
 
-## Deliverable
-
-A unit test suite was created for the custom `useDebounce` hook.
-
-### Files
-
-```text
-src/
-└── hooks/
-    ├── useDebounce.ts
-    └── useDebounce.test.ts
-```
-
----
-
-## What Was Tested
-
-### 1. Initial Value
-
-Verified that the hook immediately returns the initial value passed to it.
-
-**Expected Result**
-
-```text
-Input: "Hello"
-
-↓
-
-Output: "Hello"
-```
-
----
-
-### 2. Debounced Update
-
-Verified that the hook updates its value only after the specified delay.
-
-**Flow**
-
-```text
-Initial Value
-
-↓
-
-Hello
-
-↓
-
-Value changes to World
-
-↓
-
-Wait 500ms
-
-↓
-
-Hook updates
-
-↓
-
-Result = World
-```
-
----
-
-### 3. Timer Cleanup
-
-Verified that when the value changes before the delay completes, the previous timer is cancelled and only the latest value is applied.
-
-**Flow**
-
-```text
-A
-
-↓
-
-B
-
-↓
-
-300ms
-
-↓
-
-C
-
-↓
-
-Old timer cancelled
-
-↓
-
-500ms
-
-↓
-
-Result = C
-```
-
----
-
-## Test Execution
-
-Run all tests:
+## ▶️ Installation
 
 ```bash
-npm test
+npm install
 ```
 
-Run only the debounce test:
+Install i18n packages:
 
 ```bash
-npx jest src/hooks/useDebounce.test.ts
+npm install react-i18next i18next react-native-localize
+```
+
+Run Android:
+
+```bash
+npx react-native run-android
 ```
 
 ---
 
-## Key Testing Concepts Learned
 
-### Jest
+## 📚 Learnings
 
-* `describe()` groups related test cases.
-* `test()` defines an individual test scenario.
-* `expect()` verifies the expected output.
-* Fake timers allow testing asynchronous code without waiting in real time.
+During this project, I learned:
 
-### React Native Testing Library
-
-* `renderHook()` renders a custom hook in a test environment.
-* `rerender()` simulates the hook receiving updated values.
-* `result.current` provides the hook's latest returned value.
-* `act()` ensures React processes state updates before assertions are made.
-
----
-
-# Learnings
-
-During this assignment, I learned:
-
-* Understood the purpose and importance of unit testing in React Native.
-* Learned how Jest is used to write and execute automated tests.
-* Learned the difference between testing logic and manually verifying application behavior.
-* Understood how `describe()`, `test()`, and `expect()` work together to structure test cases.
-* Learned how `renderHook()` allows custom React hooks to be tested without creating a component.
-* Learned that `result.current` always contains the latest value returned by a hook.
-* Understood how `rerender()` simulates new props or updated values.
-* Learned why `act()` is required when a hook updates React state.
-* Learned how fake timers (`jest.useFakeTimers()`) make timer-based code deterministic and fast to test.
-* Understood how `jest.advanceTimersByTime()` simulates the passage of time instantly.
-* Learned how cleanup functions (`clearTimeout`) prevent stale timers from updating state.
-* Gained a clear understanding of how a debounce hook delays updates until the user stops changing the input.
-* Successfully wrote and executed the first passing unit tests for a custom React hook.
+* How internationalization (i18n) works in React Native.
+* How to configure **react-i18next** and initialize translation resources.
+* Why translation keys should be used instead of hardcoded strings.
+* How runtime language switching works using `i18n.changeLanguage()`.
+* How translation files are organized using JSON.
+* The purpose of `react-native-localize` for detecting the device language.
+* The importance of designing applications for multiple languages from the beginning.
+* How accessibility improves usability for users relying on screen readers.
+* How to use `accessibilityLabel`, `accessibilityRole`, and `accessibilityHint`.
+* How to create reusable UI components such as buttons, inputs, and language switchers.
+* How separating constants, utilities, translations, and components makes a project easier to maintain.
+* Why reusable components reduce code duplication and improve scalability.
+* The importance of organizing React Native projects using a clean folder structure.
 
 ---
 
-## Outcome
+## 🧠 Concept Check
 
-This assignment provided a practical introduction to testing in React Native. It demonstrated how to verify hook behavior using Jest and React Native Testing Library, laying the foundation for testing more complex components and application features in future assignments.
+### Why is RTL (Right-to-Left) support a layout concern and not just a translation concern?
+
+RTL languages such as Arabic and Hebrew require the entire layout to be mirrored. Navigation, icons, alignment, paddings, margins, text alignment, and row directions often need to change. Simply translating the text is not enough because the overall user interface must also adapt to the reading direction.
+
+### What breaks if text is hardcoded instead of using translation keys?
+
+Hardcoded text makes it difficult to support multiple languages because every screen must be edited manually. It also increases maintenance effort, makes translations error-prone, and prevents runtime language switching. Using translation keys allows the application to change languages without modifying the UI code.
+
+---
+
+## 🔮 Future Improvements
+
+* Support additional languages
+* Add RTL language support (Arabic/Hebrew)
+* Persist selected language using AsyncStorage
+* Add form validation
+* Implement Dark Mode
+* Improve accessibility with dynamic font scaling
+* Fetch translations remotely from an API or localization service
+
+---
