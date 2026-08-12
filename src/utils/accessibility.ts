@@ -1,7 +1,4 @@
-import {
-  AccessibilityRole,
-  AccessibilityState,
-} from 'react-native';
+import { AccessibilityRole, AccessibilityState } from 'react-native';
 
 type AccessibilityConfig = {
   accessibilityLabel: string;

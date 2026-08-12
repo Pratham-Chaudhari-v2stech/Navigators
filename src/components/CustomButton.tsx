@@ -13,11 +13,7 @@ interface CustomButtonProps extends TouchableOpacityProps {
   title: string;
 }
 
-const CustomButton = ({
-  title,
-  style,
-  ...props
-}: CustomButtonProps) => {
+const CustomButton = ({ title, style, ...props }: CustomButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}

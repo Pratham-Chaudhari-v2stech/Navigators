@@ -47,9 +47,7 @@ const LoginScreen = () => {
         />
 
         <TouchableOpacity>
-          <Text style={styles.forgotPasswordText}>
-            {t('forgotPassword')}
-          </Text>
+          <Text style={styles.forgotPasswordText}>{t('forgotPassword')}</Text>
         </TouchableOpacity>
 
         <CustomButton

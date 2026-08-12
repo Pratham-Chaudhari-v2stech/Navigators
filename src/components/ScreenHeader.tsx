@@ -10,18 +10,11 @@ const ScreenHeader = () => {
 
   return (
     <View style={styles.container}>
-      <Text
-        style={styles.title}
-        accessibilityRole="header"
-      >
-
+      <Text style={styles.title} accessibilityRole="header">
         {t('welcome')}
       </Text>
 
-
-      <Text style={styles.subtitle}>
-        {t('loginToContinue')}
-      </Text>
+      <Text style={styles.subtitle}>{t('loginToContinue')}</Text>
     </View>
   );
 };

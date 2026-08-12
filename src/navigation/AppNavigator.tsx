@@ -15,10 +15,7 @@ const AppNavigator = () => {
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-      />
+      <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
 };
