@@ -1,14 +1,14 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import {Provider} from 'react-redux';
 
-import './src/i18n';
-import AppNavigator from './src/navigation/AppNavigator';
+import {store} from './src/redux/store';
+import UserSearchScreen from './src/screens/UserSearchScreen';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <UserSearchScreen />
+    </Provider>
   );
 };
 
