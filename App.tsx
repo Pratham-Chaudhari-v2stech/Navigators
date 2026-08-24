@@ -1,10 +1,19 @@
 import React from 'react';
-import './global.css';
+import { NavigationContainer } from '@react-navigation/native';
+import FlashMessage from 'react-native-flash-message';
 
-import ProfileDemoScreen from './src/screens/ProfileDemoScreen';
+import AppNavigation from './src/navigation/AppNavigator';
 
 const App = () => {
-  return <ProfileDemoScreen />;
+  return (
+    <>
+      <NavigationContainer>
+        <AppNavigation />
+      </NavigationContainer>
+
+      <FlashMessage position="bottom" />
+    </>
+  );
 };
 
 export default App;

@@ -1,254 +1,340 @@
-# UI Polish Libraries
+# Day 22 — Advanced Forms & Feedback
 
-A React Native practice project demonstrating modern UI polish libraries and styling techniques.
+A React Native practice project demonstrating **advanced form handling, schema validation, OTP input, navigation, and toast-based feedback**.
 
-## Overview
+This project was created as part of my React Native training plan for **Day 22 — Advanced Forms & Feedback**.
 
-This project was created as part of the React Native training plan for **Day 21 — UI Polish Libraries**.
+---
 
-The goal of this exercise was to build a polished React Native screen using multiple UI libraries and understand when each library is useful.
+## 📚 What I Learned
 
-## Technologies Used
+This project focuses on replacing manually managed form state with reusable tools and patterns that are more suitable for larger React Native applications.
 
-* React Native `0.81.4`
-* React `19.1.0`
-* TypeScript
-* NativeWind `4.2.6`
-* React Native Vector Icons `10.3.0`
-* React Native SVG `15.15.5`
-* React Native Linear Gradient `2.8.3`
-* Lottie React Native `7.3.0`
-* React Native Reanimated `3.19.1`
+### ▸ React Hook Form
 
-## Libraries Demonstrated
+`react-hook-form` manages form state and input handling without requiring separate `useState` variables and change handlers for every field.
 
-### 1. React Native Vector Icons
-
-Used for standard UI icons such as:
-
-* Profile icon
-* Check icon
-* Arrow icon
-
-Example:
+Instead of manually managing:
 
 ```tsx
-<Icon
-  name="check"
-  size={24}
-  color="#16A34A"
-/>
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
 ```
 
-### 2. React Native SVG
+and writing separate validation and change-handling logic, React Hook Form provides utilities such as:
 
-Used to create a custom profile illustration without relying on image assets.
+* `useForm`
+* `Controller`
+* `handleSubmit`
+* `formState`
+* `errors`
+* `reset`
 
-The custom SVG contains shapes such as:
+It also helps reduce unnecessary re-renders, which becomes more useful as forms become larger.
 
-* Circles
-* Paths
-* Custom colors
+---
 
-### 3. React Native Linear Gradient
+### ▸ Yup Schema Validation
 
-Used to create the profile header gradient.
+`yup` allows validation rules to be defined in a separate schema instead of writing manual `if` conditions throughout the component.
+
+For example:
 
 ```tsx
-<LinearGradient
-  colors={['#4F46E5', '#06B6D4']}
->
-  ...
-</LinearGradient>
+const loginSchema = yup.object({
+  email: yup
+    .string()
+    .email('Enter a valid email')
+    .required('Email is required'),
+
+  password: yup
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .required('Password is required'),
+});
 ```
 
-### 4. Lottie React Native
+The Yup schema is connected to React Hook Form using `yupResolver`.
 
-Used to display a success animation after profile completion.
+This keeps the validation logic separate, reusable, and easier to maintain.
 
-The animation JSON file is stored in:
+---
+
+### ▸ OTP Input
+
+The project uses `react-native-confirmation-code-field` to create an OTP verification screen.
+
+The OTP screen demonstrates:
+
+* Multiple OTP input cells
+* OTP value handling
+* OTP validation
+* Automatic input/focus behavior
+* Verification feedback
+
+---
+
+### ▸ Toast Notifications
+
+The project uses `react-native-flash-message` for displaying success and error messages.
+
+Examples include:
 
 ```text
-src/assets/animations/success.json
+Success → Login successful
+Success → OTP verified successfully
+Error   → Invalid OTP
+Error   → Please fix the validation errors
 ```
 
-### 5. NativeWind
+Toast notifications are useful for short, non-blocking feedback because they don't interrupt the user's interaction with the application like `Alert.alert()` does.
 
-Used as the primary styling approach for the screen.
+---
 
-Instead of traditional React Native `StyleSheet` objects:
+## 🚀 Features
 
-```tsx
-<View style={styles.container}>
-```
+### 🔐 Login Screen
 
-NativeWind utility classes are used:
+The login screen demonstrates:
 
-```tsx
-<View className="flex-1 bg-gray-50">
-```
+* Email input
+* Password input
+* React Hook Form
+* Yup validation
+* Form submission
+* Validation error messages
+* Navigation to the OTP screen
 
-## Project Structure
+---
+
+### 🔢 OTP Screen
+
+The OTP screen demonstrates:
+
+* OTP input using `react-native-confirmation-code-field`
+* OTP validation using Yup
+* OTP submission
+* Success/error toast messages
+* Navigation to the success screen
+
+---
+
+### ✅ Success Screen
+
+The success screen provides a final confirmation after successful OTP verification.
+
+The flow is:
 
 ```text
-Navigators/
+Login Screen
+     │
+     ▼
+Validate Login Form
+     │
+     ▼
+   OTP Screen
+     │
+     ▼
+Validate OTP
+     │
+     ▼
+ Success Screen
+```
+
+---
+
+## 🗂️ Project Structure
+
+```text
+src/
 │
-├── src/
-│   ├── components/
-│   │   ├── CustomIllustration.tsx
-│   │   ├── ProfileHeader.tsx
-│   │   └── StatusAnimation.tsx
-│   │
-│   ├── screens/
-│   │   └── ProfileDemoScreen.tsx
-│   │
-│   └── assets/
-│       └── animations/
-│           └── success.json
+├── components/
+│   ├── CustomButton.tsx
+│   └── CustomInput.tsx
+│
+├── navigation/
+│   └── AppNavigator.tsx
+│
+├── screens/
+│   ├── LoginScreen.tsx
+│   ├── OTPScreen.tsx
+│   └── SuccessScreen.tsx
+│
+├── types/
+│   └── auth.types.ts
+│
+├── utils/
+│   └── toast.ts
+│
+└── validation/
+    ├── loginSchema.ts
+    └── otpSchema.ts
 │
 ├── App.tsx
-├── global.css
-├── global.d.ts
-├── nativewind-env.d.ts
-├── tailwind.config.js
-├── babel.config.js
-├── metro.config.js
-├── tsconfig.json
-├── package.json
 └── README.md
 ```
 
-## Deliverable Screen
+## 🛠️ Technologies & Libraries
 
-The main screen is a **Profile Demo Screen** containing:
+* React Native
+* TypeScript
+* React Navigation
+* React Hook Form
+* Yup
+* `@hookform/resolvers`
+* `react-native-confirmation-code-field`
+* `react-native-flash-message`
 
-* Gradient profile header
-* Vector icon
-* Custom SVG profile illustration
-* Profile completion information
-* Lottie success animation
-* NativeWind-styled UI
-* Continue button with vector icon
+---
 
-## Screen Flow
+## 📦 Installation
 
-```text
-App
- │
- ▼
-ProfileDemoScreen
- │
- ├── ProfileHeader
- │    ├── LinearGradient
- │    └── Vector Icon
- │
- ├── CustomIllustration
- │    └── SVG
- │
- ├── Profile Status
- │    └── Vector Icon
- │
- ├── StatusAnimation
- │    └── Lottie
- │
- └── Continue Button
-      └── Vector Icon
+Clone the repository:
+
+```bash
+git clone <your-repository-url>
 ```
 
-## Installation
+Navigate into the project:
 
-Clone the repository and install dependencies:
+```bash
+cd <project-folder>
+```
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start Metro:
-
-```bash
-npx react-native start --reset-cache
-```
-
-Run the Android application:
+Run the application on Android:
 
 ```bash
 npx react-native run-android
 ```
 
-## NativeWind Configuration
+---
 
-NativeWind is configured using:
+## 🧪 Day 22 Hands-On Practice
+
+### 1. Rebuild the Form
+
+The original Day 4 form was rebuilt using:
+
+* React Hook Form
+* Yup
+* `yupResolver`
+* Reusable `CustomInput`
+* Reusable `CustomButton`
+
+---
+
+### 2. Build an OTP Screen
+
+Created an OTP verification screen using:
 
 ```text
-tailwind.config.js
-global.css
-nativewind-env.d.ts
-babel.config.js
-metro.config.js
+react-native-confirmation-code-field
 ```
 
-The project uses Tailwind-style utility classes such as:
+The OTP is validated using a dedicated Yup schema:
 
-```tsx
-<View className="flex-1 items-center justify-center bg-white">
-  <Text className="text-2xl font-bold text-gray-900">
-    Welcome
-  </Text>
-</View>
+```text
+validation/
+└── otpSchema.ts
 ```
 
-## Key Concepts Learned
+---
 
-### When to use SVG vs Vector Icons
+### 3. Add Toast Feedback
 
-**Vector icons** are better for common UI icons such as search, edit, delete, settings, arrows, and checkmarks.
+Created a reusable toast utility:
 
-**SVG** is more suitable for custom graphics, illustrations, logos, and designs that require detailed control over paths, shapes, and styling.
-
-### NativeWind vs StyleSheet
-
-**NativeWind**
-
-```tsx
-<View className="flex-1 bg-white p-4">
+```text
+utils/
+└── toast.ts
 ```
 
-Advantages:
+This allows success and error feedback to be triggered without repeatedly writing the flash-message configuration inside each screen.
 
-* Fast utility-based styling
-* Styles remain close to the component
-* Consistent spacing and design utilities
-* Useful when a project already follows Tailwind conventions
+---
 
-**StyleSheet**
+## 💡 Concept Check
 
-```tsx
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 16,
-  },
-});
+### What does React Hook Form save you from doing manually?
+
+React Hook Form saves you from manually managing form state and validation for every individual input.
+
+Without it, you might need:
+
+```text
+useState for each input
+        ↓
+onChangeText handlers
+        ↓
+individual error states
+        ↓
+manual validation
+        ↓
+manual form submission
+        ↓
+manual reset logic
 ```
 
-Advantages:
+With React Hook Form:
 
-* Explicit object-based styling
-* Easy to organize complex styles
-* Standard React Native approach
-* Useful when extensive custom styling is required
+```text
+useForm()
+   ↓
+register / Controller
+   ↓
+handleSubmit()
+   ↓
+validation
+   ↓
+formState.errors
+```
 
-The choice depends on the project's architecture, team conventions, and UI complexity.
+This results in cleaner and more maintainable forms, especially when a form contains many fields.
 
-## Learning Outcome
+---
 
-By completing this project, I practiced:
+### Why is a toast usually better UX than `Alert.alert()` for confirmations?
 
-* Using vector icon libraries
-* Creating custom SVG graphics
-* Implementing gradient backgrounds
-* Integrating Lottie JSON animations
-* Styling React Native components with NativeWind
-* Organizing reusable UI components
-* Combining multiple UI libraries in a single screen
+A toast is usually better for simple confirmations because it is:
+
+* **Non-blocking**
+* **Temporary**
+* **Less disruptive**
+* **Quick to understand**
+* **Doesn't require the user to dismiss a popup**
+
+For example:
+
+```text
+✓ Login successful
+```
+
+can appear briefly while the user continues using the application.
+
+`Alert.alert()` is more appropriate when the user needs to explicitly acknowledge something or make a decision.
+
+---
+
+## 🎯 Key Takeaways
+
+Through this project, I learned how to:
+
+* Build forms using React Hook Form
+* Manage form state without multiple `useState` variables
+* Create reusable Yup validation schemas
+* Connect Yup with React Hook Form using `yupResolver`
+* Create reusable form components
+* Build an OTP verification screen
+* Validate OTP input
+* Create reusable toast utilities
+* Provide non-blocking success and error feedback
+* Organize a React Native project into reusable folders
+* Connect multiple screens using React Navigation
+
+---
