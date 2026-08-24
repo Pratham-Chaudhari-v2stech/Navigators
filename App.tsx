@@ -1,15 +1,10 @@
 import React from 'react';
-import {Provider} from 'react-redux';
+import './global.css';
 
-import {store} from './src/redux/store';
-import UserSearchScreen from './src/screens/UserSearchScreen';
+import ProfileDemoScreen from './src/screens/ProfileDemoScreen';
 
 const App = () => {
-  return (
-    <Provider store={store}>
-      <UserSearchScreen />
-    </Provider>
-  );
+  return <ProfileDemoScreen />;
 };
 
 export default App;
