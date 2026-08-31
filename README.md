@@ -1,295 +1,263 @@
-# Firebase Notifications & Crashlytics – React Native
+# Device Utilities & File Handling
 
-A React Native CLI demo project that demonstrates how to integrate **Firebase Cloud Messaging (FCM)**, **Notifee local notifications**, and **Firebase Crashlytics**.
+A small React Native CLI practice project demonstrating device utilities, local file handling, network connectivity, and runtime permissions.
 
-## Features
+## 📱 Features
 
-* 🔔 Request notification permissions
-* 📱 Get the device FCM token
-* ☁️ Receive Firebase Cloud Messaging notifications
-* 🔔 Display local notifications using Notifee
-* 🚀 Handle notifications when the app is opened from a notification
-* 📊 Log events using Firebase Crashlytics
-* 💥 Send a test crash to Crashlytics
-* 📝 Record errors in Crashlytics
+### 1. File System Access
 
-## Tech Stack
+Uses `react-native-fs` to work with files stored locally on the device.
 
-* React Native CLI
-* TypeScript
-* Firebase
-* Firebase Cloud Messaging (FCM)
-* Firebase Crashlytics
-* Notifee
+Implemented:
 
-## Project Structure
+* Write a file
+* Read a file
+* Delete a file
+* Check whether a file exists
+
+Example flow:
 
 ```text
-.
-├── android/
-├── ios/
-├── src/
-│   └── services/
-│       ├── firebaseMessaging.ts
-│       └── localNotification.ts
-├── App.tsx
-├── package.json
-└── README.md
+Write File
+    ↓
+Local Device Storage
+    ↓
+Read File
+    ↓
+Display File Content
 ```
 
-## Requirements
+---
 
-Before running the project, make sure you have:
+### 2. Device Information
 
-* Node.js
-* npm
-* React Native development environment
-* Android Studio
-* Android SDK
-* A Firebase project
-* Android device or emulator
+Uses `react-native-device-info` to display:
 
-## Firebase Setup
-
-### 1. Create a Firebase Project
-
-Go to the Firebase Console:
-
-https://console.firebase.google.com/
-
-Create a new Firebase project.
-
-### 2. Add Android App
-
-Inside your Firebase project:
-
-1. Open **Project Settings**
-2. Select **Add app**
-3. Select **Android**
-4. Enter your Android package name
-5. Download `google-services.json`
-
-Place the file here:
-
-```text
-android/app/google-services.json
-```
-
-### 3. Enable Cloud Messaging
-
-Firebase Console → **Messaging**
-
-Use the Firebase Messaging test composer to send a notification to your device.
-
-The application displays the device's FCM token on the home screen.
-
-Copy that token and use it as the test recipient.
-
-## Install Dependencies
-
-Clone the repository:
-
-```bash
-git clone <your-repository-url>
-cd <project-folder>
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-## Android Setup
-
-Make sure your Firebase configuration is correctly added to:
-
-```text
-android/app/google-services.json
-```
-
-Then clean the Android build:
-
-```bash
-cd android
-./gradlew clean
-cd ..
-```
-
-Run the application:
-
-```bash
-npx react-native run-android
-```
-
-## Notification Flow
-
-The application handles notifications in different states.
-
-### Foreground
-
-When the application is open:
-
-```text
-Firebase Cloud Messaging
-        ↓
-React Native Firebase Messaging
-        ↓
-Foreground message handler
-        ↓
-Notifee
-        ↓
-Local notification displayed
-```
-
-Android does not automatically display an FCM notification payload while the app is in the foreground, so the application uses Notifee to display the notification locally.
-
-### Background
-
-When the application is running in the background, Firebase handles the notification according to the message payload and Android notification configuration.
-
-### App Opened From Notification
-
-The application also checks whether it was opened by tapping a notification.
-
-```text
-Notification
-     ↓
-User taps notification
-     ↓
-Application opens
-     ↓
-Initial notification message is retrieved
-     ↓
-Latest Event is updated
-```
-
-## Local Notification
-
-The **Send Local Notification** button creates a notification directly on the device using Notifee.
-
-This does not require Firebase.
-
-```text
-User taps button
-       ↓
-showLocalNotification()
-       ↓
-Notifee
-       ↓
-Android notification
-```
-
-## Crashlytics
-
-The application also demonstrates Firebase Crashlytics.
-
-### Logging
+* Device model
+* Operating system and version
+* Application version
+* Build number
 
 Example:
 
-```ts
-log(crashlytics, 'Local Notifee notification displayed');
+```text
+Device Information
+
+Model: Pixel 7
+OS: Android 13
+App Version: 1.0.0
+Build Number: 1
 ```
 
-### Recording Errors
+---
 
-Errors are recorded using:
+### 3. Network Status
 
-```ts
-recordError(
-  crashlytics,
-  error instanceof Error ? error : new Error(String(error)),
-);
+Uses `@react-native-community/netinfo` to monitor the device's network connection.
+
+Implemented:
+
+* Online/offline status
+* Connection type
+* Real-time network status updates
+* Offline banner
+
+When the device loses its connection:
+
+```text
+⚠ No Internet Connection
 ```
 
-### Test Crash
+The banner automatically disappears when the connection is restored.
 
-The **Force Test Crash** button intentionally crashes the application.
+---
 
-After reopening the application, Firebase Crashlytics should process and display the crash report.
+### 4. Runtime Permissions
 
-> Test crashes should only be used during development/testing.
+Uses `react-native-permissions` to request Android camera permission.
 
-## Testing FCM
+Implemented:
 
-1. Run the application.
-2. Wait for the FCM token to appear.
-3. Copy the token.
-4. Open Firebase Console.
-5. Go to **Messaging**.
-6. Create a test notification.
-7. Select the device/token.
-8. Send the notification.
-9. Check the application for the received notification.
+* Request camera permission
+* Display permission status
+* Handle permission results
 
-## Important Notes
+Possible permission states include:
 
-### Notification Permission
+```text
+Granted
+Denied
+Blocked
+Unavailable
+```
 
-Notification permission must be granted before notifications can be displayed.
+---
 
-On newer Android versions, notification permission must be explicitly requested.
+## 🛠️ Technologies Used
 
-### FCM Token
+* React Native CLI
+* TypeScript
+* `react-native-fs`
+* `react-native-device-info`
+* `@react-native-community/netinfo`
+* `react-native-permissions`
 
-The FCM token identifies the application instance/device for Firebase Cloud Messaging.
+---
 
-The token can change, so production applications should handle token refresh appropriately.
+## 📂 Project Structure
 
-### Notifee
+```text
+src/
+├── components/
+│   └── OfflineBanner.tsx
+│
+├── screens/
+│   └── DeviceUtilities/
+│       └── DeviceUtilitiesScreen.tsx
+│
+└── utils/
+    ├── fileSystem.ts
+    ├── deviceInfo.ts
+    └── permissions.ts
 
-Notifee is used to create and display local Android notifications, especially for foreground FCM messages.
+App.tsx
+```
 
-## Useful Commands
+### File Responsibilities
 
-Install dependencies:
+| File                        | Responsibility                          |
+| --------------------------- | --------------------------------------- |
+| `OfflineBanner.tsx`         | Displays the offline network banner     |
+| `DeviceUtilitiesScreen.tsx` | Main UI and feature integration         |
+| `fileSystem.ts`             | Local file read/write/delete operations |
+| `deviceInfo.ts`             | Device and application information      |
+| `permissions.ts`            | Camera permission handling              |
+
+---
+
+## 📦 Installation
+
+Install the required dependencies:
 
 ```bash
-npm install
+npm install react-native-fs react-native-device-info @react-native-community/netinfo react-native-permissions
 ```
+
+For iOS:
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+---
+
+## 🔐 Android Permission
+
+Camera permission is declared in:
+
+```text
+android/app/src/main/AndroidManifest.xml
+```
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+---
+
+## ▶️ Run the Project
 
 Start Metro:
 
 ```bash
-npx react-native start
+npm start
 ```
 
 Run Android:
 
 ```bash
-npx react-native run-android
+npm run android
 ```
 
-Clean Android:
+If you make changes to native Android configuration, clean and rebuild:
 
 ```bash
 cd android
 ./gradlew clean
 cd ..
+npm run android
 ```
 
-Check connected devices:
+---
 
-```bash
-adb devices
+## 🎯 Learning Objectives
+
+This task demonstrates how React Native applications can interact with device-level functionality.
+
+### File System
+
+```text
+React Native
+     ↓
+react-native-fs
+     ↓
+Device File Storage
 ```
 
-## Learning Outcomes
+### Device Information
 
-This project demonstrates:
+```text
+React Native
+     ↓
+react-native-device-info
+     ↓
+Device / OS / App Information
+```
 
-* Firebase project configuration
-* FCM token generation
-* Push notification permissions
-* Foreground FCM message handling
-* Notification open handling
-* Local notifications with Notifee
-* Crashlytics logging
-* Crashlytics error reporting
-* Intentional test crash reporting
-* Basic Firebase integration in React Native CLI
+### Network
 
-## License
+```text
+React Native
+     ↓
+NetInfo
+     ↓
+Network State
+     ↓
+Online / Offline UI
+```
 
-This project is created for learning and development purposes.
+### Permissions
+
+```text
+React Native
+     ↓
+react-native-permissions
+     ↓
+Android Permission API
+     ↓
+Permission Result
+```
+
+---
+
+## ✅ Task Checklist
+
+* [x] Write a file locally
+* [x] Read a local file
+* [x] Delete a local file
+* [x] Display device information
+* [x] Display application version
+* [x] Display build number
+* [x] Detect network status
+* [x] Display offline banner
+* [x] Request camera permission
+* [x] Display permission status
+* [x] Separate utility logic from UI
+
+---
+
+## 📚 Key Takeaway
+
+This exercise demonstrates how React Native can access native device capabilities through third-party native modules while keeping the application code organized into reusable components, screens, and utility functions.
