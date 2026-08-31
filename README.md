@@ -1,203 +1,96 @@
-# Day 22 — Advanced Forms & Feedback
+# Firebase Notifications & Crashlytics – React Native
 
-A React Native practice project demonstrating **advanced form handling, schema validation, OTP input, navigation, and toast-based feedback**.
+A React Native CLI demo project that demonstrates how to integrate **Firebase Cloud Messaging (FCM)**, **Notifee local notifications**, and **Firebase Crashlytics**.
 
-This project was created as part of my React Native training plan for **Day 22 — Advanced Forms & Feedback**.
+## Features
 
----
+* 🔔 Request notification permissions
+* 📱 Get the device FCM token
+* ☁️ Receive Firebase Cloud Messaging notifications
+* 🔔 Display local notifications using Notifee
+* 🚀 Handle notifications when the app is opened from a notification
+* 📊 Log events using Firebase Crashlytics
+* 💥 Send a test crash to Crashlytics
+* 📝 Record errors in Crashlytics
 
-## 📚 What I Learned
+## Tech Stack
 
-This project focuses on replacing manually managed form state with reusable tools and patterns that are more suitable for larger React Native applications.
+* React Native CLI
+* TypeScript
+* Firebase
+* Firebase Cloud Messaging (FCM)
+* Firebase Crashlytics
+* Notifee
 
-### ▸ React Hook Form
-
-`react-hook-form` manages form state and input handling without requiring separate `useState` variables and change handlers for every field.
-
-Instead of manually managing:
-
-```tsx
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-```
-
-and writing separate validation and change-handling logic, React Hook Form provides utilities such as:
-
-* `useForm`
-* `Controller`
-* `handleSubmit`
-* `formState`
-* `errors`
-* `reset`
-
-It also helps reduce unnecessary re-renders, which becomes more useful as forms become larger.
-
----
-
-### ▸ Yup Schema Validation
-
-`yup` allows validation rules to be defined in a separate schema instead of writing manual `if` conditions throughout the component.
-
-For example:
-
-```tsx
-const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email('Enter a valid email')
-    .required('Email is required'),
-
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
-});
-```
-
-The Yup schema is connected to React Hook Form using `yupResolver`.
-
-This keeps the validation logic separate, reusable, and easier to maintain.
-
----
-
-### ▸ OTP Input
-
-The project uses `react-native-confirmation-code-field` to create an OTP verification screen.
-
-The OTP screen demonstrates:
-
-* Multiple OTP input cells
-* OTP value handling
-* OTP validation
-* Automatic input/focus behavior
-* Verification feedback
-
----
-
-### ▸ Toast Notifications
-
-The project uses `react-native-flash-message` for displaying success and error messages.
-
-Examples include:
+## Project Structure
 
 ```text
-Success → Login successful
-Success → OTP verified successfully
-Error   → Invalid OTP
-Error   → Please fix the validation errors
-```
-
-Toast notifications are useful for short, non-blocking feedback because they don't interrupt the user's interaction with the application like `Alert.alert()` does.
-
----
-
-## 🚀 Features
-
-### 🔐 Login Screen
-
-The login screen demonstrates:
-
-* Email input
-* Password input
-* React Hook Form
-* Yup validation
-* Form submission
-* Validation error messages
-* Navigation to the OTP screen
-
----
-
-### 🔢 OTP Screen
-
-The OTP screen demonstrates:
-
-* OTP input using `react-native-confirmation-code-field`
-* OTP validation using Yup
-* OTP submission
-* Success/error toast messages
-* Navigation to the success screen
-
----
-
-### ✅ Success Screen
-
-The success screen provides a final confirmation after successful OTP verification.
-
-The flow is:
-
-```text
-Login Screen
-     │
-     ▼
-Validate Login Form
-     │
-     ▼
-   OTP Screen
-     │
-     ▼
-Validate OTP
-     │
-     ▼
- Success Screen
-```
-
----
-
-## 🗂️ Project Structure
-
-```text
-src/
-│
-├── components/
-│   ├── CustomButton.tsx
-│   └── CustomInput.tsx
-│
-├── navigation/
-│   └── AppNavigator.tsx
-│
-├── screens/
-│   ├── LoginScreen.tsx
-│   ├── OTPScreen.tsx
-│   └── SuccessScreen.tsx
-│
-├── types/
-│   └── auth.types.ts
-│
-├── utils/
-│   └── toast.ts
-│
-└── validation/
-    ├── loginSchema.ts
-    └── otpSchema.ts
-│
+.
+├── android/
+├── ios/
+├── src/
+│   └── services/
+│       ├── firebaseMessaging.ts
+│       └── localNotification.ts
 ├── App.tsx
+├── package.json
 └── README.md
 ```
 
-## 🛠️ Technologies & Libraries
+## Requirements
 
-* React Native
-* TypeScript
-* React Navigation
-* React Hook Form
-* Yup
-* `@hookform/resolvers`
-* `react-native-confirmation-code-field`
-* `react-native-flash-message`
+Before running the project, make sure you have:
 
----
+* Node.js
+* npm
+* React Native development environment
+* Android Studio
+* Android SDK
+* A Firebase project
+* Android device or emulator
 
-## 📦 Installation
+## Firebase Setup
+
+### 1. Create a Firebase Project
+
+Go to the Firebase Console:
+
+https://console.firebase.google.com/
+
+Create a new Firebase project.
+
+### 2. Add Android App
+
+Inside your Firebase project:
+
+1. Open **Project Settings**
+2. Select **Add app**
+3. Select **Android**
+4. Enter your Android package name
+5. Download `google-services.json`
+
+Place the file here:
+
+```text
+android/app/google-services.json
+```
+
+### 3. Enable Cloud Messaging
+
+Firebase Console → **Messaging**
+
+Use the Firebase Messaging test composer to send a notification to your device.
+
+The application displays the device's FCM token on the home screen.
+
+Copy that token and use it as the test recipient.
+
+## Install Dependencies
 
 Clone the repository:
 
 ```bash
 git clone <your-repository-url>
-```
-
-Navigate into the project:
-
-```bash
 cd <project-folder>
 ```
 
@@ -207,134 +100,196 @@ Install dependencies:
 npm install
 ```
 
-Run the application on Android:
+## Android Setup
+
+Make sure your Firebase configuration is correctly added to:
+
+```text
+android/app/google-services.json
+```
+
+Then clean the Android build:
+
+```bash
+cd android
+./gradlew clean
+cd ..
+```
+
+Run the application:
 
 ```bash
 npx react-native run-android
 ```
 
----
+## Notification Flow
 
-## 🧪 Day 22 Hands-On Practice
+The application handles notifications in different states.
 
-### 1. Rebuild the Form
+### Foreground
 
-The original Day 4 form was rebuilt using:
-
-* React Hook Form
-* Yup
-* `yupResolver`
-* Reusable `CustomInput`
-* Reusable `CustomButton`
-
----
-
-### 2. Build an OTP Screen
-
-Created an OTP verification screen using:
+When the application is open:
 
 ```text
-react-native-confirmation-code-field
-```
-
-The OTP is validated using a dedicated Yup schema:
-
-```text
-validation/
-└── otpSchema.ts
-```
-
----
-
-### 3. Add Toast Feedback
-
-Created a reusable toast utility:
-
-```text
-utils/
-└── toast.ts
-```
-
-This allows success and error feedback to be triggered without repeatedly writing the flash-message configuration inside each screen.
-
----
-
-## 💡 Concept Check
-
-### What does React Hook Form save you from doing manually?
-
-React Hook Form saves you from manually managing form state and validation for every individual input.
-
-Without it, you might need:
-
-```text
-useState for each input
+Firebase Cloud Messaging
         ↓
-onChangeText handlers
+React Native Firebase Messaging
         ↓
-individual error states
+Foreground message handler
         ↓
-manual validation
+Notifee
         ↓
-manual form submission
-        ↓
-manual reset logic
+Local notification displayed
 ```
 
-With React Hook Form:
+Android does not automatically display an FCM notification payload while the app is in the foreground, so the application uses Notifee to display the notification locally.
+
+### Background
+
+When the application is running in the background, Firebase handles the notification according to the message payload and Android notification configuration.
+
+### App Opened From Notification
+
+The application also checks whether it was opened by tapping a notification.
 
 ```text
-useForm()
-   ↓
-register / Controller
-   ↓
-handleSubmit()
-   ↓
-validation
-   ↓
-formState.errors
+Notification
+     ↓
+User taps notification
+     ↓
+Application opens
+     ↓
+Initial notification message is retrieved
+     ↓
+Latest Event is updated
 ```
 
-This results in cleaner and more maintainable forms, especially when a form contains many fields.
+## Local Notification
 
----
+The **Send Local Notification** button creates a notification directly on the device using Notifee.
 
-### Why is a toast usually better UX than `Alert.alert()` for confirmations?
-
-A toast is usually better for simple confirmations because it is:
-
-* **Non-blocking**
-* **Temporary**
-* **Less disruptive**
-* **Quick to understand**
-* **Doesn't require the user to dismiss a popup**
-
-For example:
+This does not require Firebase.
 
 ```text
-✓ Login successful
+User taps button
+       ↓
+showLocalNotification()
+       ↓
+Notifee
+       ↓
+Android notification
 ```
 
-can appear briefly while the user continues using the application.
+## Crashlytics
 
-`Alert.alert()` is more appropriate when the user needs to explicitly acknowledge something or make a decision.
+The application also demonstrates Firebase Crashlytics.
 
----
+### Logging
 
-## 🎯 Key Takeaways
+Example:
 
-Through this project, I learned how to:
+```ts
+log(crashlytics, 'Local Notifee notification displayed');
+```
 
-* Build forms using React Hook Form
-* Manage form state without multiple `useState` variables
-* Create reusable Yup validation schemas
-* Connect Yup with React Hook Form using `yupResolver`
-* Create reusable form components
-* Build an OTP verification screen
-* Validate OTP input
-* Create reusable toast utilities
-* Provide non-blocking success and error feedback
-* Organize a React Native project into reusable folders
-* Connect multiple screens using React Navigation
+### Recording Errors
 
----
+Errors are recorded using:
+
+```ts
+recordError(
+  crashlytics,
+  error instanceof Error ? error : new Error(String(error)),
+);
+```
+
+### Test Crash
+
+The **Force Test Crash** button intentionally crashes the application.
+
+After reopening the application, Firebase Crashlytics should process and display the crash report.
+
+> Test crashes should only be used during development/testing.
+
+## Testing FCM
+
+1. Run the application.
+2. Wait for the FCM token to appear.
+3. Copy the token.
+4. Open Firebase Console.
+5. Go to **Messaging**.
+6. Create a test notification.
+7. Select the device/token.
+8. Send the notification.
+9. Check the application for the received notification.
+
+## Important Notes
+
+### Notification Permission
+
+Notification permission must be granted before notifications can be displayed.
+
+On newer Android versions, notification permission must be explicitly requested.
+
+### FCM Token
+
+The FCM token identifies the application instance/device for Firebase Cloud Messaging.
+
+The token can change, so production applications should handle token refresh appropriately.
+
+### Notifee
+
+Notifee is used to create and display local Android notifications, especially for foreground FCM messages.
+
+## Useful Commands
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start Metro:
+
+```bash
+npx react-native start
+```
+
+Run Android:
+
+```bash
+npx react-native run-android
+```
+
+Clean Android:
+
+```bash
+cd android
+./gradlew clean
+cd ..
+```
+
+Check connected devices:
+
+```bash
+adb devices
+```
+
+## Learning Outcomes
+
+This project demonstrates:
+
+* Firebase project configuration
+* FCM token generation
+* Push notification permissions
+* Foreground FCM message handling
+* Notification open handling
+* Local notifications with Notifee
+* Crashlytics logging
+* Crashlytics error reporting
+* Intentional test crash reporting
+* Basic Firebase integration in React Native CLI
+
+## License
+
+This project is created for learning and development purposes.

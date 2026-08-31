@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "965166658854",
+    "project_id": "day23demo",
+    "storage_bucket": "day23demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965166658854:android:0063071fa30f2974f17de7",
+        "android_client_info": {
+          "package_name": "com.day3"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWCAZvllY3z6iw1TJAmS5JYyrtc-DHbSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
