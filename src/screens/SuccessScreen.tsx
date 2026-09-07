@@ -1,31 +1,51 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import CustomButton from '../components/CustomButton';
-import { RootStackParamList } from '../navigation/AppNavigator';
+import { RootStackParamList } from '../navigation/AppNavigation';
 
-type SuccessScreenProps = NativeStackScreenProps<RootStackParamList, 'Success'>;
+type SuccessScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Success'
+>;
 
 const SuccessScreen = ({ navigation }: SuccessScreenProps) => {
   const handleDone = () => {
-    navigation.navigate('Login');
+    navigation.navigate('Approval');
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.iconContainer}>
-          <Text style={styles.checkmark}>✓</Text>
-        </View>
+      <Text style={styles.icon}>✓</Text>
 
-        <Text style={styles.title}>Verification Successful</Text>
+      <Text style={styles.title}>
+        Approval Successful
+      </Text>
 
-        <Text style={styles.message}>
-          Your OTP has been verified successfully.
+      <Text style={styles.message}>
+        Customer approval has been completed successfully.
+      </Text>
+
+      <View style={styles.statusContainer}>
+        <Text style={styles.status}>
+          ✓ Biometric Verified
         </Text>
 
-        <CustomButton title="Done" onPress={handleDone} />
+        <Text style={styles.status}>
+          ✓ Signature Captured
+        </Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Done"
+          onPress={handleDone}
+        />
       </View>
     </View>
   );
@@ -34,59 +54,45 @@ const SuccessScreen = ({ navigation }: SuccessScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
   },
 
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#DCFCE7',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 24,
-  },
-
-  checkmark: {
-    fontSize: 44,
-    color: '#16A34A',
-    fontWeight: '700',
+  icon: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 
   title: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#111',
-    textAlign: 'center',
-    marginBottom: 10,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
 
   message: {
-    fontSize: 15,
-    color: '#666',
+    fontSize: 16,
     textAlign: 'center',
-    lineHeight: 22,
     marginBottom: 30,
   },
 
-  card: {
+  statusContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
     width: '100%',
-    padding: 24,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
+    marginBottom: 30,
+  },
 
-    elevation: 5,
+  status: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+
+  buttonContainer: {
+    width: '100%',
   },
 });
 
