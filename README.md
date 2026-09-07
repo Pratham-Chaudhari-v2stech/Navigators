@@ -1,340 +1,810 @@
-# Day 22 — Advanced Forms & Feedback
+# Secure Approval POC
 
-A React Native practice project demonstrating **advanced form handling, schema validation, OTP input, navigation, and toast-based feedback**.
+A React Native CLI proof-of-concept demonstrating a **secure customer approval flow** using:
 
-This project was created as part of my React Native training plan for **Day 22 — Advanced Forms & Feedback**.
+* 🔐 Biometric Authentication
+* ✍️ Digital Signature Capture
+* 📋 Approval Summary
+* 📦 Mock Approval Payload
+* 🧭 React Navigation
+* 🔷 TypeScript
+
+This project is intended as a learning POC to understand how native device capabilities such as biometrics and signature capture can be integrated into a React Native application.
 
 ---
 
-## 📚 What I Learned
+## 1. Project Overview
 
-This project focuses on replacing manually managed form state with reusable tools and patterns that are more suitable for larger React Native applications.
+The application simulates a customer approval process.
 
-### ▸ React Hook Form
+The user first views customer information, then verifies their identity using biometric authentication, provides a digital signature, reviews the approval information, and finally confirms the approval.
 
-`react-hook-form` manages form state and input handling without requiring separate `useState` variables and change handlers for every field.
+### Approval Flow
 
-Instead of manually managing:
-
-```tsx
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+```text
+Customer Details
+       ↓
+Biometric Verification
+       ↓
+Digital Signature
+       ↓
+Approval Summary
+       ↓
+Confirm Approval
+       ↓
+Success Screen
 ```
 
-and writing separate validation and change-handling logic, React Hook Form provides utilities such as:
+---
 
-* `useForm`
-* `Controller`
-* `handleSubmit`
-* `formState`
-* `errors`
-* `reset`
+## 2. Features
 
-It also helps reduce unnecessary re-renders, which becomes more useful as forms become larger.
+### 🔐 Biometric Verification
+
+The application uses:
+
+```text
+react-native-simple-biometrics
+```
+
+to authenticate the user using the device's available biometric authentication mechanism.
+
+Depending on the device, this could be:
+
+* Fingerprint
+* Face authentication
+* Other supported biometric authentication
+
+The application first checks whether biometric authentication is available.
+
+```ts
+const canAuthenticate =
+  await SimpleBiometrics.canAuthenticate();
+```
+
+Then it requests authentication:
+
+```ts
+const result = await SimpleBiometrics.requestBioAuth(
+  'Customer Approval',
+  'Authenticate to approve the customer',
+);
+```
+
+The approval flow continues only when authentication succeeds.
 
 ---
 
-### ▸ Yup Schema Validation
+### ✍️ Digital Signature
 
-`yup` allows validation rules to be defined in a separate schema instead of writing manual `if` conditions throughout the component.
+The application uses:
 
-For example:
+```text
+react-native-signature-capture
+```
 
-```tsx
-const loginSchema = yup.object({
-  email: yup
-    .string()
-    .email('Enter a valid email')
-    .required('Email is required'),
+to provide a signature pad.
 
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
+The user can:
+
+* Draw a signature
+* Clear the signature
+* Confirm the signature
+
+The captured signature is returned as an encoded value.
+
+```ts
+const handleSignature = (result: {
+  encoded: string;
+}) => {
+  onSignatureCaptured(result.encoded);
+};
+```
+
+The signature is stored in React state.
+
+---
+
+### 📋 Approval Summary
+
+After biometric verification and signature capture, the application displays:
+
+* Customer name
+* Approval amount
+* Biometric verification status
+* Captured signature
+
+Example:
+
+```text
+Approval Summary
+
+Customer: Rahul Sharma
+Amount: ₹50000
+Biometric: ✓ Verified
+
+Signature:
+[ Captured Signature ]
+
+[ Confirm Approval ]
+```
+
+---
+
+### 📦 Mock Approval Payload
+
+When the user confirms the approval, the application creates a payload similar to what would eventually be sent to a backend API.
+
+Example:
+
+```json
+{
+  "customerId": "CUS001",
+  "customerName": "Rahul Sharma",
+  "amount": 50000,
+  "biometricVerified": true,
+  "signature": "BASE64_SIGNATURE_DATA",
+  "approvedAt": "2026-09-07T..."
+}
+```
+
+Currently, this payload is only logged to the console.
+
+There is no backend integration in this POC.
+
+---
+
+## 3. Technologies Used
+
+| Technology                     | Purpose                            |
+| ------------------------------ | ---------------------------------- |
+| React Native CLI               | Mobile application framework       |
+| TypeScript                     | Type-safe development              |
+| React Navigation               | Screen navigation                  |
+| react-native-simple-biometrics | Biometric authentication           |
+| react-native-signature-capture | Digital signature                  |
+| React Hooks                    | State management                   |
+| Android/iOS Native APIs        | Device authentication capabilities |
+
+---
+
+## 4. Project Structure
+
+```text
+SecureApproval/
+│
+├── android/
+├── ios/
+│
+├── src/
+│   │
+│   ├── components/
+│   │   ├── ApprovalSummary.tsx
+│   │   └── SignaturePad.tsx
+│   │
+│   ├── navigation/
+│   │   └── AppNavigation.tsx
+│   │
+│   ├── screens/
+│   │   ├── ApprovalScreen.tsx
+│   │   └── SuccessScreen.tsx
+│   │
+│   ├── services/
+│   │   └── biometricService.ts
+│   │
+│   ├── types/
+│   │   └── approval.ts
+│   │
+│   └── utils/
+│       └── approvalPayload.ts
+│
+├── App.tsx
+├── package.json
+└── tsconfig.json
+```
+
+---
+
+## 5. Folder Responsibilities
+
+### `components/`
+
+Contains reusable UI components.
+
+#### `SignaturePad.tsx`
+
+Responsible for:
+
+* Rendering the signature area
+* Saving the signature
+* Clearing the signature
+* Returning the captured signature to the parent component
+
+#### `ApprovalSummary.tsx`
+
+Responsible for displaying the final approval information.
+
+---
+
+### `navigation/`
+
+Contains application navigation.
+
+#### `AppNavigation.tsx`
+
+Defines the navigation stack:
+
+```text
+Approval
+   ↓
+Success
+```
+
+The navigation parameter list is typed using TypeScript:
+
+```ts
+export type RootStackParamList = {
+  Approval: undefined;
+  Success: undefined;
+};
+```
+
+This gives type safety when navigating between screens.
+
+---
+
+### `screens/`
+
+Contains complete application screens.
+
+#### `ApprovalScreen.tsx`
+
+This is the main screen.
+
+It controls the approval flow:
+
+```text
+Customer Details
+       ↓
+Biometric Verification
+       ↓
+Signature
+       ↓
+Approval Summary
+       ↓
+Confirm Approval
+```
+
+#### `SuccessScreen.tsx`
+
+Displayed after successful approval.
+
+It shows:
+
+```text
+✓ Approval Successful
+
+✓ Biometric Verified
+✓ Signature Captured
+
+[ Done ]
+```
+
+---
+
+### `services/`
+
+Contains logic that interacts with native/device functionality.
+
+#### `biometricService.ts`
+
+Keeps biometric logic separate from the UI.
+
+Instead of calling the biometric library directly inside the screen, the screen calls:
+
+```ts
+authenticateWithBiometrics();
+```
+
+This separation makes the code easier to maintain and test.
+
+---
+
+### `types/`
+
+Contains TypeScript types/interfaces.
+
+#### `approval.ts`
+
+Defines the approval data structure:
+
+```ts
+export interface ApprovalData {
+  customerId: string;
+  customerName: string;
+  amount: number;
+  biometricVerified: boolean;
+  signature: string | null;
+  approvedAt: string | null;
+}
+```
+
+---
+
+### `utils/`
+
+Contains helper functions.
+
+#### `approvalPayload.ts`
+
+Creates the final approval payload:
+
+```ts
+createApprovalPayload({
+  customerId,
+  customerName,
+  amount,
+  biometricVerified,
+  signature,
 });
 ```
 
-The Yup schema is connected to React Hook Form using `yupResolver`.
+It also generates the approval timestamp:
 
-This keeps the validation logic separate, reusable, and easier to maintain.
-
----
-
-### ▸ OTP Input
-
-The project uses `react-native-confirmation-code-field` to create an OTP verification screen.
-
-The OTP screen demonstrates:
-
-* Multiple OTP input cells
-* OTP value handling
-* OTP validation
-* Automatic input/focus behavior
-* Verification feedback
-
----
-
-### ▸ Toast Notifications
-
-The project uses `react-native-flash-message` for displaying success and error messages.
-
-Examples include:
-
-```text
-Success → Login successful
-Success → OTP verified successfully
-Error   → Invalid OTP
-Error   → Please fix the validation errors
-```
-
-Toast notifications are useful for short, non-blocking feedback because they don't interrupt the user's interaction with the application like `Alert.alert()` does.
-
----
-
-## 🚀 Features
-
-### 🔐 Login Screen
-
-The login screen demonstrates:
-
-* Email input
-* Password input
-* React Hook Form
-* Yup validation
-* Form submission
-* Validation error messages
-* Navigation to the OTP screen
-
----
-
-### 🔢 OTP Screen
-
-The OTP screen demonstrates:
-
-* OTP input using `react-native-confirmation-code-field`
-* OTP validation using Yup
-* OTP submission
-* Success/error toast messages
-* Navigation to the success screen
-
----
-
-### ✅ Success Screen
-
-The success screen provides a final confirmation after successful OTP verification.
-
-The flow is:
-
-```text
-Login Screen
-     │
-     ▼
-Validate Login Form
-     │
-     ▼
-   OTP Screen
-     │
-     ▼
-Validate OTP
-     │
-     ▼
- Success Screen
+```ts
+approvedAt: new Date().toISOString()
 ```
 
 ---
 
-## 🗂️ Project Structure
+## 6. Installation
 
-```text
-src/
-│
-├── components/
-│   ├── CustomButton.tsx
-│   └── CustomInput.tsx
-│
-├── navigation/
-│   └── AppNavigator.tsx
-│
-├── screens/
-│   ├── LoginScreen.tsx
-│   ├── OTPScreen.tsx
-│   └── SuccessScreen.tsx
-│
-├── types/
-│   └── auth.types.ts
-│
-├── utils/
-│   └── toast.ts
-│
-└── validation/
-    ├── loginSchema.ts
-    └── otpSchema.ts
-│
-├── App.tsx
-└── README.md
-```
-
-## 🛠️ Technologies & Libraries
-
-* React Native
-* TypeScript
-* React Navigation
-* React Hook Form
-* Yup
-* `@hookform/resolvers`
-* `react-native-confirmation-code-field`
-* `react-native-flash-message`
-
----
-
-## 📦 Installation
-
-Clone the repository:
+Create a React Native CLI project:
 
 ```bash
-git clone <your-repository-url>
+npx @react-native-community/cli init SecureApproval
 ```
 
-Navigate into the project:
+Move into the project:
 
 ```bash
-cd <project-folder>
+cd SecureApproval
 ```
 
-Install dependencies:
+---
+
+## 7. Install Dependencies
+
+### React Navigation
 
 ```bash
-npm install
+npm install @react-navigation/native
+npm install @react-navigation/native-stack
 ```
 
-Run the application on Android:
+Install the required native dependencies:
+
+```bash
+npm install react-native-screens react-native-safe-area-context
+```
+
+---
+
+### Biometric Authentication
+
+```bash
+npm install react-native-simple-biometrics
+```
+
+---
+
+### Digital Signature
+
+```bash
+npm install react-native-signature-capture
+```
+
+---
+
+## 8. Android Setup
+
+After installing native dependencies, clean the Android build:
+
+```bash
+cd android
+./gradlew clean
+cd ..
+```
+
+Then rebuild:
 
 ```bash
 npx react-native run-android
 ```
 
----
+For a physical Android device, make sure:
 
-## 🧪 Day 22 Hands-On Practice
-
-### 1. Rebuild the Form
-
-The original Day 4 form was rebuilt using:
-
-* React Hook Form
-* Yup
-* `yupResolver`
-* Reusable `CustomInput`
-* Reusable `CustomButton`
-
----
-
-### 2. Build an OTP Screen
-
-Created an OTP verification screen using:
-
-```text
-react-native-confirmation-code-field
+```bash
+adb devices
 ```
 
-The OTP is validated using a dedicated Yup schema:
+shows the device.
 
-```text
-validation/
-└── otpSchema.ts
+---
+
+## 9. iOS Setup
+
+On macOS, install iOS dependencies:
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+Then run:
+
+```bash
+npx react-native run-ios
+```
+
+> iOS development/building requires macOS with Xcode.
+
+---
+
+## 10. Biometric Flow
+
+The biometric service performs two main operations.
+
+### Step 1 — Check availability
+
+```ts
+const canAuthenticate =
+  await SimpleBiometrics.canAuthenticate();
+```
+
+This determines whether biometric authentication can be used.
+
+### Step 2 — Request authentication
+
+```ts
+const result =
+  await SimpleBiometrics.requestBioAuth(
+    'Customer Approval',
+    'Authenticate to approve the customer',
+  );
+```
+
+If authentication succeeds:
+
+```ts
+setBiometricVerified(true);
+```
+
+The signature step is then displayed.
+
+---
+
+## 11. Signature Flow
+
+The `SignaturePad` component creates a signature capture view.
+
+When the user confirms the signature:
+
+```ts
+signatureRef.current?.saveImage();
+```
+
+The library triggers the save callback:
+
+```ts
+onSaveEvent={handleSignature}
+```
+
+The encoded signature is then returned:
+
+```ts
+onSignatureCaptured(result.encoded);
+```
+
+The parent screen stores it:
+
+```ts
+setSignature(capturedSignature);
 ```
 
 ---
 
-### 3. Add Toast Feedback
+## 12. Approval Validation
 
-Created a reusable toast utility:
+Before approval is submitted, two conditions must be satisfied.
 
-```text
-utils/
-└── toast.ts
+### Biometric must be verified
+
+```ts
+if (!biometricVerified) {
+  Alert.alert(
+    'Biometric Required',
+    'Please complete biometric verification first.',
+  );
+
+  return;
+}
 ```
 
-This allows success and error feedback to be triggered without repeatedly writing the flash-message configuration inside each screen.
+### Signature must exist
+
+```ts
+if (!signature) {
+  Alert.alert(
+    'Signature Required',
+    'Please provide your signature first.',
+  );
+
+  return;
+}
+```
+
+Only after both checks pass is the approval payload created.
 
 ---
 
-## 💡 Concept Check
+## 13. Mock Backend Payload
 
-### What does React Hook Form save you from doing manually?
+The POC currently does not communicate with a backend.
 
-React Hook Form saves you from manually managing form state and validation for every individual input.
+Instead, it creates a mock payload:
 
-Without it, you might need:
-
-```text
-useState for each input
-        ↓
-onChangeText handlers
-        ↓
-individual error states
-        ↓
-manual validation
-        ↓
-manual form submission
-        ↓
-manual reset logic
+```ts
+const payload = createApprovalPayload({
+  customerId,
+  customerName,
+  amount,
+  biometricVerified,
+  signature,
+});
 ```
 
-With React Hook Form:
+The payload is logged:
 
-```text
-useForm()
-   ↓
-register / Controller
-   ↓
-handleSubmit()
-   ↓
-validation
-   ↓
-formState.errors
+```ts
+console.log(
+  JSON.stringify(payload, null, 2),
+);
 ```
 
-This results in cleaner and more maintainable forms, especially when a form contains many fields.
+In a real application this could later be replaced with an API call:
+
+```ts
+await axios.post(
+  '/approval',
+  payload,
+);
+```
 
 ---
 
-### Why is a toast usually better UX than `Alert.alert()` for confirmations?
+## 14. Important Concept
 
-A toast is usually better for simple confirmations because it is:
+### Biometric Data Is NOT Sent to the Backend
 
-* **Non-blocking**
-* **Temporary**
-* **Less disruptive**
-* **Quick to understand**
-* **Doesn't require the user to dismiss a popup**
+The application does not receive or store the user's actual fingerprint or face data.
 
-For example:
+The biometric system is handled by the operating system.
+
+The application receives a result such as:
 
 ```text
-✓ Login successful
+Authentication successful
 ```
 
-can appear briefly while the user continues using the application.
+or:
 
-`Alert.alert()` is more appropriate when the user needs to explicitly acknowledge something or make a decision.
+```text
+Authentication failed
+```
+
+Therefore, the backend would normally receive an application-level verification result rather than the user's raw biometric information.
+
+---
+
+## 15. State Management
+
+The main approval screen maintains three pieces of state:
+
+```ts
+const [biometricVerified, setBiometricVerified] =
+  useState(false);
+
+const [signature, setSignature] =
+  useState<string | null>(null);
+
+const [showSignaturePad, setShowSignaturePad] =
+  useState(false);
+```
+
+### `biometricVerified`
+
+Tracks whether biometric authentication succeeded.
+
+```text
+false → Authentication not completed
+true  → Authentication successful
+```
+
+### `signature`
+
+Stores the captured signature.
+
+```text
+null → No signature
+string → Signature captured
+```
+
+### `showSignaturePad`
+
+Controls whether the signature component is visible.
+
+```text
+false → Hide signature pad
+true  → Show signature pad
+```
 
 ---
 
-## 🎯 Key Takeaways
+## 16. Navigation Flow
 
-Through this project, I learned how to:
+React Navigation manages two screens:
 
-* Build forms using React Hook Form
-* Manage form state without multiple `useState` variables
-* Create reusable Yup validation schemas
-* Connect Yup with React Hook Form using `yupResolver`
-* Create reusable form components
-* Build an OTP verification screen
-* Validate OTP input
-* Create reusable toast utilities
-* Provide non-blocking success and error feedback
-* Organize a React Native project into reusable folders
-* Connect multiple screens using React Navigation
+```text
+┌──────────────────────┐
+│   Approval Screen    │
+└──────────┬───────────┘
+           │
+           │ Confirm Approval
+           ↓
+┌──────────────────────┐
+│   Success Screen     │
+└──────────────────────┘
+```
+
+Navigation is type-safe because the application defines:
+
+```ts
+export type RootStackParamList = {
+  Approval: undefined;
+  Success: undefined;
+};
+```
+
+Then:
+
+```ts
+navigation.navigate('Success');
+```
+
+TypeScript verifies that `Success` is a valid screen.
 
 ---
+
+## 17. Learning Objectives
+
+This POC helps demonstrate several important React Native concepts.
+
+### React Native
+
+* Components
+* Props
+* State
+* Hooks
+* Conditional rendering
+* Styles
+* Native modules
+
+### TypeScript
+
+* Interfaces
+* Union types
+* Generic React Navigation types
+* Function parameter types
+* Return types
+
+### React Navigation
+
+* Native Stack Navigator
+* Navigation props
+* Typed navigation
+* Screen configuration
+
+### Native Features
+
+* Biometric authentication
+* Signature capture
+* Android/iOS native integration
+
+### Application Architecture
+
+* Components
+* Screens
+* Services
+* Utilities
+* Types
+
+---
+
+## 18. Future Improvements
+
+This POC can later be extended with:
+
+* Backend API integration
+* Authentication/token handling
+* Customer API
+* Real approval API
+* Loading indicators
+* Error handling
+* Network error handling
+* Redux/Zustand state management
+* Secure local storage
+* Approval history
+* Multiple customers
+* Dynamic customer data
+* Digital signature upload
+* Server-side signature verification
+* Audit logging
+* Approval status tracking
+
+---
+
+## 19. Production Considerations
+
+This project is a **POC** and should not be considered production-ready.
+
+A production implementation should additionally consider:
+
+* Secure API communication using HTTPS
+* Authentication and authorization
+* Secure token storage
+* Server-side validation
+* Proper error handling
+* Signature integrity
+* Audit trails
+* Replay protection
+* Device security
+* Biometric authentication policies
+* Backend verification of approval state
+
+---
+
+## 20. Summary
+
+The Secure Approval POC demonstrates a simple but realistic mobile approval workflow:
+
+```text
+Customer Details
+       ↓
+Check Biometric Availability
+       ↓
+Biometric Authentication
+       ↓
+Capture Digital Signature
+       ↓
+Display Approval Summary
+       ↓
+Validate Approval
+       ↓
+Create Approval Payload
+       ↓
+Navigate to Success
+```
+
+The main architectural idea is to keep responsibilities separated:
+
+```text
+Screen
+  ↓
+Service / Component / Utility
+  ↓
+Native Library
+```
+
+This makes the application easier to understand, maintain, test, and extend with a real backend in the future.
